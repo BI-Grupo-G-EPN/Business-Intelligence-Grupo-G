@@ -1,30 +1,32 @@
-<div style="display: flex; margin-bottom: 20px;">
+<div style="display: flex; margin-bottom: 20px; align=center">
   <img src="https://raw.githubusercontent.com/fernygeek/Business-Intelligence-Grupo-G/main/logos/EscudoEPN.png" alt="logoEPN" style="flex: 50%; width: 150px; margin-right: 100px;">
   <img src="https://raw.githubusercontent.com/fernygeek/Business-Intelligence-Grupo-G/main/logos/logoFIS.png" alt="LogoFIS" style="flex: 50%; width: 200px; padding: 10px">
 </div> 
 
-<div align=center>
-        <span style="font-size: 28px; font-weight: bold">Escuela Politécnica Nacional</span> <br>
-        <span style="font-size: 20px; font-weight: bold">Facultad de Ingeniería de Sistemas</span><br>
-        <span style="font-size: 14px; font-weight: bold">Business Intelligence GR2SW</span>
+<div align="center">
+
+<h3>Escuela Politécnica Nacional</h3>
+<h4>Facultad de Ingeniería de Sistemas</h4>
+<h5>Business Intelligence GR2SW</h5>
+
 </div>
+
 <hr>
-<div>
 
 **Integrantes**
+
 - Erick Caicedo
 - Nahomy Llumiquinga
 - Jhonny Moreira
 - Ruth Rueda
 
-<strong>Docente:</strong> PhD. Diana Martínez<br>
-<strong>Fecha de entrega:</strong> 13 de octubre de 2026
-</div>
+**Docente:** PhD. Diana Martínez
 
-<div>
-        <span style="font-size: 20px; font-weight: bold">Práctica 1: Implementación de un proceso ETL y Staging Area con Pentaho Data Integration</span> 
-</div>
+**Fecha de entrega:** 13 de octubre de 2026
 
+<h3 align="center">
+Práctica 1: Implementación de un proceso ETL y Staging Area con Pentaho Data Integration
+</h3>
 
 
 ## Índice
