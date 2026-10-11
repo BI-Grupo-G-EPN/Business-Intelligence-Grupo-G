@@ -1,6 +1,6 @@
 <div style="display: flex; margin-bottom: 20px;">
-  <img src="https://raw.githubusercontent.com/fernygeek/Business-Intelligence-Grupo-G/main/logos/EscudoEPN.png" alt="logoEPN" style="flex: 50%; width: 200px; margin-right: 100px;">
-  <img src="https://raw.githubusercontent.com/fernygeek/Business-Intelligence-Grupo-G/main/logos/logoFIS.png" alt="LogoFIS" style="flex: 50%; width: 200px; padding: 20px">
+  <img src="https://raw.githubusercontent.com/fernygeek/Business-Intelligence-Grupo-G/main/logos/EscudoEPN.png" alt="logoEPN" style="flex: 50%; width: 150px; margin-right: 100px;">
+  <img src="https://raw.githubusercontent.com/fernygeek/Business-Intelligence-Grupo-G/main/logos/logoFIS.png" alt="LogoFIS" style="flex: 50%; width: 200px; padding: 10px">
 </div> 
 
 # **Documentación Prácticas Grupo G** 
