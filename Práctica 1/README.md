@@ -1,7 +1,16 @@
-<div style="display: flex; margin-bottom: 20px; align=center">
-  <img src="https://raw.githubusercontent.com/fernygeek/Business-Intelligence-Grupo-G/main/logos/EscudoEPN.png" alt="logoEPN" style="flex: 50%; width: 150px; margin-right: 100px;">
-  <img src="https://raw.githubusercontent.com/fernygeek/Business-Intelligence-Grupo-G/main/logos/logoFIS.png" alt="LogoFIS" style="flex: 50%; width: 200px; padding: 10px">
-</div> 
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/fernygeek/Business-Intelligence-Grupo-G/main/logos/EscudoEPN.png"
+       alt="Logo EPN"
+       width="150">
+
+  </td>
+
+  <img src="https://raw.githubusercontent.com/fernygeek/Business-Intelligence-Grupo-G/main/logos/logoFIS.png"
+       alt="Logo FIS"
+       width="200">
+</div>
+
 
 <div align="center">
 
