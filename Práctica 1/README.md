@@ -18,7 +18,7 @@
 - Erick Caicedo
 - Nahomy Llumiquinga
 - Jhonny Moreira
-- Ruth Rueda
+- Fernanda Rueda
 
 **Docente:** PhD. Diana Martínez
 
