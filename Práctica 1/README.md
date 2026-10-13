@@ -30,6 +30,37 @@ Práctica 1: Implementación de un proceso ETL y Staging Area con Pentaho Data I
 
 
 ## Índice
+- [Índice](#índice)
+- [1. Introducción](#1-introducción)
+- [2. Objetivos](#2-objetivos)
+  - [2.1. Objetivo general](#21-objetivo-general)
+  - [2.2. Objetivos específicos](#22-objetivos-específicos)
+- [3. Herramientas y fuentes](#3-herramientas-y-fuentes)
+- [4. Desarrollo](#4-desarrollo)
+  - [4.1 Parte 1: Transformaciones al dataset provisto](#41-parte-1-transformaciones-al-dataset-provisto)
+    - [4.1.1. Fuente y problemas identificados](#411-fuente-y-problemas-identificados)
+    - [4.1.2. Flujo ETL de la parte 1](#412-flujo-etl-de-la-parte-1)
+    - [4.1.3. Transformación 1: nombres y apellidos](#413-transformación-1-nombres-y-apellidos)
+    - [4.1.4 Transformación 2: validación de fechas](#414-transformación-2-validación-de-fechas)
+    - [4.1.5. Salida y validación de la parte 1](#415-salida-y-validación-de-la-parte-1)
+  - [4.2. Parte 2: Diseño y ejecución de un proceso ETL](#42-parte-2-diseño-y-ejecución-de-un-proceso-etl)
+    - [4.2.1 Fuentes de datos utilizadas](#421-fuentes-de-datos-utilizadas)
+    - [4.2.2. Problemas encontrados en los datos](#422-problemas-encontrados-en-los-datos)
+    - [4.2.3. Flujo ETL desarrollado](#423-flujo-etl-desarrollado)
+    - [4.2.4. Extracción](#424-extracción)
+    - [4.2.5. Primera transformación: String Operations](#425-primera-transformación-string-operations)
+    - [4.2.6. Segunda transformación: If field value is null](#426-segunda-transformación-if-field-value-is-null)
+    - [4.2.7. Integración de las fuentes con Stream Lookup](#427-integración-de-las-fuentes-con-stream-lookup)
+    - [4.2.8. Carga de datos procesados](#428-carga-de-datos-procesados)
+    - [4.2.9. Resultado esperado y verificación](#429-resultado-esperado-y-verificación)
+- [5. Validación y evidencias](#5-validación-y-evidencias)
+  - [5.1. Tabla de evidencias por actividad](#51-tabla-de-evidencias-por-actividad)
+  - [5.2. Criterios de calidad](#52-criterios-de-calidad)
+- [6. Relación con la arquitectura de un Data Warehouse](#6-relación-con-la-arquitectura-de-un-data-warehouse)
+- [7. Conclusiones](#7-conclusiones)
+- [8. Referencias bibliográficas](#8-referencias-bibliográficas)
+- [9. Declaración de uso de la IA](#9-declaración-de-uso-de-la-ia)
+
 
 ## 1. Introducción
 
@@ -212,7 +243,7 @@ La línea punteada representa el **information hop** desde `JSON Categorias` hac
 ![Figura X. Extracción json](figuras/parte%202/extraccion_json.png)
 **Figura X.** Extracción de datos de `categorias_netflix.json`.
 
-### 4.2.5. Primera transformación: String Operations
+#### 4.2.5. Primera transformación: String Operations
 
 **Objetivo:** eliminar espacios sobrantes al inicio y al final de varios campos sin reemplazar los datos originales.
 
