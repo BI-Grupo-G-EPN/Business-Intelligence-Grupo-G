@@ -95,7 +95,7 @@ Implementar el proceso **ETL** (Extract, Transform, Load) mediante Pentaho Data 
 | `Caso Estudiantes Fechas Cedula.xls` | XLS | [Dataset provisto para la parte 1](input/parte%201/Caso%20Estudiantes%20Fechas%20Cedula.xls) |
 | `netflix_titles.csv` | CSV | [Fuente principal de la parte 2: títulos de Netflix](input/parte%202/netflix_titles.csv) |
 | `categorias_netflix.json` | JSON | [Catálogo complementario para clasificaciones de audiencia](input/parte%202/categorias_netflix.json) |
-| `[nombre_salida_estudiantes].xls` | XLS | Salida a generar o adjuntar para la actividad 1 |
+| `resultado_estandarizado.xls` | XLS | [Salida de la parte 1](output/parte%201/resultado_estandarizado.xls) |
 | `salida_netflix.xls` | XLS | [Salida de la parte 2](output/parte%202/salida_netflix.xls) |
 
 ## 4. Desarrollo
