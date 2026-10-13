@@ -1,0 +1,86 @@
+[
+  {
+    "codigo_rating": "TV-MA",
+    "categoria_audiencia": "ADULTOS",
+    "descripcion": "Contenido para público adulto",
+    "registros_csv": 3207
+  },
+  {
+    "codigo_rating": "TV-14",
+    "categoria_audiencia": "ADOLESCENTES",
+    "descripcion": "Contenido recomendado para mayores de 14 años",
+    "registros_csv": 2160
+  },
+  {
+    "codigo_rating": "TV-PG",
+    "categoria_audiencia": "SUPERVISION PARENTAL",
+    "descripcion": "Se recomienda orientación de los padres",
+    "registros_csv": 863
+  },
+  {
+    "codigo_rating": "R",
+    "categoria_audiencia": "ADULTOS",
+    "descripcion": "Clasificación cinematográfica restringida",
+    "registros_csv": 799
+  },
+  {
+    "codigo_rating": "PG-13",
+    "categoria_audiencia": "ADOLESCENTES",
+    "descripcion": "Se recomienda precaución para menores de 13 años",
+    "registros_csv": 490
+  },
+  {
+    "codigo_rating": "TV-Y7",
+    "categoria_audiencia": "INFANTIL",
+    "descripcion": "Contenido dirigido a niños de 7 años o más",
+    "registros_csv": 334
+  },
+  {
+    "codigo_rating": "TV-Y",
+    "categoria_audiencia": "INFANTIL",
+    "descripcion": "Contenido dirigido a niños pequeños",
+    "registros_csv": 307
+  },
+  {
+    "codigo_rating": "PG",
+    "categoria_audiencia": "SUPERVISION PARENTAL",
+    "descripcion": "Se recomienda orientación de los padres",
+    "registros_csv": 287
+  },
+  {
+    "codigo_rating": "TV-G",
+    "categoria_audiencia": "PUBLICO GENERAL",
+    "descripcion": "Contenido apto para todo público",
+    "registros_csv": 220
+  },
+  {
+    "codigo_rating": "NR",
+    "categoria_audiencia": "SIN CLASIFICAR",
+    "descripcion": "Clasificación no disponible",
+    "registros_csv": 80
+  },
+  {
+    "codigo_rating": "G",
+    "categoria_audiencia": "PUBLICO GENERAL",
+    "descripcion": "Contenido apto para todo público",
+    "registros_csv": 41
+  },
+  {
+    "codigo_rating": "TV-Y7-FV",
+    "categoria_audiencia": "INFANTIL",
+    "descripcion": "Contenido infantil con violencia de fantasía",
+    "registros_csv": 6
+  },
+  {
+    "codigo_rating": "NC-17",
+    "categoria_audiencia": "ADULTOS",
+    "descripcion": "Contenido para mayores de 17 años",
+    "registros_csv": 3
+  },
+  {
+    "codigo_rating": "UR",
+    "categoria_audiencia": "SIN CLASIFICAR",
+    "descripcion": "Contenido sin clasificación oficial",
+    "registros_csv": 3
+  }
+]
