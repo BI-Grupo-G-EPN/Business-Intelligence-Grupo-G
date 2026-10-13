@@ -67,9 +67,10 @@ Implementar el proceso **ETL** (Extract, Transform, Load) mediante Pentaho Data 
 | `[nombre_salida_estudiantes].xls` | XLS | Salida a generar o adjuntar para la actividad 1 |
 | `salida_netflix.xls` | XLS | [Salida de la parte 2](output/parte%202/salida_netflix.xls) |
 
-## 4. Parte 1: Transformaciones al dataset provisto
+## 4. Desarrollo
+### 4.1 Parte 1: Transformaciones al dataset provisto
 
-### 4.1. Fuente y problemas identificados
+#### 4.1.1. Fuente y problemas identificados
 
 **Fuente:** `Caso Estudiantes Fechas Cedula.xls`, archivo proporcionado para la práctica.
 
@@ -104,7 +105,7 @@ Los problemas observados son los siguientes:
 
 **Figura 3.** Ejemplo de una celda con fórmula en la columna de fechas.
 
-### 4.3. Flujo ETL de la parte 1
+#### 4.1.2. Flujo ETL de la parte 1
 
 ```mermaid
 flowchart TD
@@ -116,7 +117,7 @@ flowchart TD
 
 > **[POR CONFIRMAR CON EL COMPAÑERO]** Este diagrama representa el **flujo metodológico previsto**. Sustituirlo o ajustarlo según los pasos, nombres y conexiones reales del archivo `.ktr` que desarrolló el compañero. La guía exige dos transformaciones: corrección de nombres/apellidos y validación de fechas; no exige un componente específico para lograrlas.
 
-### 4.4. Transformación 1: nombres y apellidos
+#### 4.1.3. Transformación 1: nombres y apellidos
 
 **Propósito:** uniformar el texto de los nombres sin perder los valores originales.
 
@@ -135,7 +136,7 @@ flowchart TD
 
 **Evidencia pendiente:** [POR COMPLETAR: captura del componente configurado, vista previa antes/después y conteo de registros corregidos].
 
-### 4.5. Transformación 2: validación de fechas
+#### 4.1.4 Transformación 2: validación de fechas
 
 **Propósito:** identificar fechas interpretables e identificar los casos que no pueden convertirse con certeza.
 
@@ -152,7 +153,7 @@ El campo `FECHA ESTADO` puede contener texto, fechas con año de dos o cuatro ci
 
 **Evidencia pendiente:** [POR COMPLETAR: componente real usado por el compañero, reglas implementadas, ejemplos verificados y cantidad de fechas válidas/erróneas].
 
-### 4.6. Salida y validación de la parte 1
+#### 4.1.5. Salida y validación de la parte 1
 
 - **Salida:** [POR COMPLETAR: nombre exacto, formato, hoja y ubicación del archivo generado].
 - **Registros de entrada:** [POR COMPLETAR].
@@ -163,15 +164,15 @@ El campo `FECHA ESTADO` puede contener texto, fechas con año de dos o cuatro ci
 
 **Criterio de aceptación:** comparar cada dato original con el dato transformado, verificar las correcciones justificables y conservar señalados los casos ambiguos, sin inventar tildes ni fechas.
 
-## 5. Parte 2: Diseño y ejecución de un proceso ETL
+### 4.2. Parte 2: Diseño y ejecución de un proceso ETL
 
-### 5.1. Fuentes de datos utilizadas
+#### 4.2.1 Fuentes de datos utilizadas
 
 - **Fuente 1 (CSV):** `netflix_titles.csv`, dataset *Netflix Movies and TV Shows*. Contiene **8.807 registros** y **12 columnas**: `show_id`, `type`, `title`, `director`, `cast`, `country`, `date_added`, `release_year`, `rating`, `duration`, `listed_in` y `description`.
 
 - **Fuente 2 — JSON:** `categorias_netflix.json`, catálogo complementario para la clasificación de audiencia. Contiene **14 objetos** con: `codigo_rating`, `categoria_audiencia`, `descripcion` y `registros_csv`.
 
-### 5.2. Problemas encontrados en los datos
+#### 4.2.2. Problemas encontrados en los datos
 
 La revisión de los archivos mostró la siguiente distribución del campo `rating`:
 
@@ -184,7 +185,7 @@ La revisión de los archivos mostró la siguiente distribución del campo `ratin
 
 Se comprobó también que el catálogo incluye 14 claves de clasificación donde los 7 registros que no coinciden se marcaron para revisión, no se eliminaron.
 
-### 5.3. Flujo ETL desarrollado
+#### 4.2.3. Flujo ETL desarrollado
 
 ```mermaid
 flowchart TD
@@ -201,7 +202,7 @@ La línea punteada representa el **information hop** desde `JSON Categorias` hac
 ![Figura X. Information hop](figuras/parte%202/lookup_information_hop.png)
 **Figura X.** Conexión de información (*information hop*) usada por `Stream Lookup`.
 
-### 5.4. Extracción
+#### 4.2.4. Extracción
 
 1. En `CSV File Input` se lee `netflix_titles.csv` con separador coma, comillas como delimitador de texto, cabecera y codificación UTF-8 (Figura).
 ![Figura X. Extracción csv](figuras/parte%202/extraccion_csv.png)
@@ -211,7 +212,7 @@ La línea punteada representa el **information hop** desde `JSON Categorias` hac
 ![Figura X. Extracción json](figuras/parte%202/extraccion_json.png)
 **Figura X.** Extracción de datos de `categorias_netflix.json`.
 
-### 5.5. Primera transformación: String Operations
+### 4.2.5. Primera transformación: String Operations
 
 **Objetivo:** eliminar espacios sobrantes al inicio y al final de varios campos sin reemplazar los datos originales.
 
@@ -227,7 +228,7 @@ Se conserva mayúsculas y minúsculas (`Lower/Upper = none`). Esta operación co
 ![Figura X. Configuracion String operation](figuras/parte%202/configuracion_string_operation.png)
 **Figura X.** Configuración de la transformación String Operations para la limpieza y estandarización de campos de texto del dataset de Netflix.
 
-### 5.6. Segunda transformación: If field value is null
+#### 4.2.6. Segunda transformación: If field value is null
 
 **Objetivo:** gestionar valores faltantes en los campos procesados.
 
@@ -242,7 +243,7 @@ Se utiliza `Select fields` para limitar el reemplazo a esos campos. Las cadenas 
 ![Figura X. Configuracion If fiel value is null](figuras/parte%202/configuracion_if_field_value_is_null.png)
 **Figura X.** Configuración de la transformación If field value is null para el tratamiento de valores nulos en los datos de Netflix.
 
-### 5.7. Integración de las fuentes con Stream Lookup
+#### 4.2.7. Integración de las fuentes con Stream Lookup
 
 La configuración observada en Spoon utiliza:
 
@@ -262,7 +263,7 @@ La configuración observada en Spoon utiliza:
 
 Como la clave `rating_limpio` es de tipo **String**, no corresponde activar la optimización *Key and value are exactly one integer field*.
 
-### 5.8. Carga de datos procesados
+#### 4.2.8. Carga de datos procesados
 
 **Componente previsto:** `Microsoft Excel Writer`.  
 **Formato solicitado:** `.xls`.  
@@ -273,7 +274,7 @@ Los campos de interés en la salida son `show_id`, `title`, `titulo_limpio`, `di
 ![Figura X. Configuracion del archivo de salida](figuras/parte%202/configuracion_salida.png)
 **Figura X.** Configuración de la salida.
 
-### 5.9. Resultado esperado y verificación
+#### 4.2.9. Resultado esperado y verificación
 
 El proceso ETL permitió integrar las fuentes CSV y JSON de Netflix, aplicando transformaciones de limpieza y estandarización mediante Pentaho Data Integration.
 
@@ -298,9 +299,10 @@ Los conteos finales deben confirmarse con los resultados de ejecución de Pentah
 ![Figura X. Archivo de salida](figuras/parte%202/salida_excel.png)
 
 **Figura X.** Resultado del proceso ETL con los datos limpios y las categorías de audiencia integradas.
-## 6. Validación y evidencias
 
-### 6.1. Tabla de evidencias por actividad
+## 5. Validación y evidencias
+
+### 5.1. Tabla de evidencias por actividad
 
 | Actividad | Evidencia | Estado |
 |---|---|---|
@@ -316,7 +318,7 @@ Los conteos finales deben confirmarse con los resultados de ejecución de Pentah
 | 2 | Vista previa de integración y XLS final | **[POR COMPLETAR]** |
 | 2 | Conteo final y ejecución sin errores | **[POR COMPLETAR]** |
 
-### 6.2. Criterios de calidad
+### 5.2. Criterios de calidad
 
 - **Integridad:** no perder ni duplicar filas durante el proceso.
 - **Consistencia:** normalizar campos textuales y consultar clasificaciones desde un único catálogo.
@@ -324,7 +326,7 @@ Los conteos finales deben confirmarse con los resultados de ejecución de Pentah
 - **Validez:** marcar fechas que no existen y ratings que no pertenecen al catálogo.
 - **Trazabilidad:** conservar los campos originales y documentar las reglas empleadas.
 
-## 7. Relación con la arquitectura de un Data Warehouse
+## 6. Relación con la arquitectura de un Data Warehouse
 
 Un proceso ETL constituye la etapa preparatoria para un entorno de Inteligencia de Negocios. Las fuentes operacionales proporcionan información; el área de staging recibe y prepara los registros; las transformaciones resuelven problemas de calidad e integración; y el resultado puede cargarse posteriormente en un **Data Warehouse** o **Data Mart** para análisis e informes.
 
@@ -339,7 +341,7 @@ flowchart
 
 En esta práctica **la salida es un archivo Excel, no un Data Warehouse implementado**. Aun así, la arquitectura desarrollada reproduce las etapas fundamentales de preparación de datos requeridas para una carga analítica futura. El catálogo JSON cumple una función similar a una pequeña tabla de referencia o dimensión de clasificaciones.
 
-## 8. Conclusiones
+## 7. Conclusiones
 
 1. La Parte 1 permite identificar que la limpieza de nombres y apellidos requiere reglas controladas; algunos caracteres anómalos son ambiguos y no deben sustituirse de forma automática sin evidencia.
 2. La variabilidad de fechas demuestra la importancia de diferenciar formato visual, datos textuales y fórmulas antes de estandarizar la información.
@@ -347,12 +349,12 @@ En esta práctica **la salida es un archivo Excel, no un Data Warehouse implemen
 4. El análisis de las fuentes de Netflix identificó 8.800 clasificaciones compatibles con el catálogo y 7 registros pendientes de revisión. **Es necesario comprobar estos totales en la salida final de Pentaho** antes de presentarlos como resultados de ejecución.
 5. Ambos procesos ilustran la función del ETL como preparación y control de calidad previa a una posible arquitectura de Data Warehouse.
 
-## 9. Referencias bibliográficas
+## 8. Referencias bibliográficas
 
 1. Escuela Politécnica Nacional, Facultad de Ingeniería de Sistemas. *Práctica 1. Implementación de un proceso ETL y Staging Area con Pentaho Data Integration*. Material de clase facilitado para Business Intelligence, pp. 1–12.
 2. Shivam Bansal. *Netflix Movies and TV Shows*. Kaggle. https://www.kaggle.com/datasets/shivamb/netflix-shows (consultado para la práctica; indicar fecha de descarga: **[POR COMPLETAR]**).
 3. Proyecto Pentaho. *Pentaho Data Integration (Kettle)*. https://pentaho.com/pentaho-data-integration/ (referencia general de la herramienta).
 4. Equipo de trabajo. `categorias_netflix.json`. Catálogo complementario elaborado a partir de los códigos de clasificación encontrados en `netflix_titles.csv`.
 
-## 10. Declaración de uso de la IA
+## 9. Declaración de uso de la IA
 En el desarrollo de esta práctica se utilizó una herramienta de inteligencia artificial generativa como apoyo en aproximadamente un **20% del trabajo**, principalmente para la selección de fuentes de datos, generación del catálogo JSON de categorías de Netflix, orientación en la configuración de componentes de Pentaho Data Integration y organización y redacción de la documentación en Markdown. El **80% restante** fue realizado directamente por los integrantes del grupo, incluyendo la implementación y ejecución de los procesos ETL, aplicación de transformaciones de limpieza y estandarización, integración de fuentes de datos, generación de archivos de salida, validación de resultados y recopilación de evidencias. Todo el contenido proporcionado por la IA fue revisado, adaptado y validado por los integrantes del equipo.
