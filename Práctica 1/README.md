@@ -230,18 +230,18 @@ flowchart TD
 
 La línea punteada representa el **information hop** desde `JSON Categorias` hacia `Stream Lookup`, que entrega datos complementarios para la búsqueda sin unir simplemente los dos flujos de registros (Figura).
 
-![Figura X. Information hop](figuras/parte%202/lookup_information_hop.png)
-**Figura X.** Conexión de información (*information hop*) usada por `Stream Lookup`.
+![Figura 4. Information hop](figuras/parte%202/lookup_information_hop.png)
+**Figura 4.** Conexión de información (*information hop*) usada por `Stream Lookup`.
 
 #### 4.2.4. Extracción
 
 1. En `CSV File Input` se lee `netflix_titles.csv` con separador coma, comillas como delimitador de texto, cabecera y codificación UTF-8 (Figura).
-![Figura X. Extracción csv](figuras/parte%202/extraccion_csv.png)
-**Figura X.** Extracción de datos de `netflix_titles.csv`.
+![Figura 5. Extracción csv](figuras/parte%202/extraccion_csv.png)
+**Figura 5.** Extracción de datos de `netflix_titles.csv`.
 
 1. En `JSON Input` se lee `categorias_netflix.json` y se extraen las propiedades `codigo_rating`, `categoria_audiencia`, `descripcion` y `registros_csv` (Figura).
-![Figura X. Extracción json](figuras/parte%202/extraccion_json.png)
-**Figura X.** Extracción de datos de `categorias_netflix.json`.
+![Figura 6. Extracción json](figuras/parte%202/extraccion_json.png)
+**Figura 6.** Extracción de datos de `categorias_netflix.json`.
 
 #### 4.2.5. Primera transformación: String Operations
 
@@ -256,8 +256,8 @@ La línea punteada representa el **information hop** desde `JSON Categorias` hac
 
 Se conserva mayúsculas y minúsculas (`Lower/Upper = none`). Esta operación corresponde a **estandarización textual**.
 
-![Figura X. Configuracion String operation](figuras/parte%202/configuracion_string_operation.png)
-**Figura X.** Configuración de la transformación String Operations para la limpieza y estandarización de campos de texto del dataset de Netflix.
+![Figura 7. Configuracion String operation](figuras/parte%202/configuracion_string_operation.png)
+**Figura 7.** Configuración de la transformación String Operations para la limpieza y estandarización de campos de texto del dataset de Netflix.
 
 #### 4.2.6. Segunda transformación: If field value is null
 
@@ -271,8 +271,8 @@ Se conserva mayúsculas y minúsculas (`Lower/Upper = none`). Esta operación co
 
 Se utiliza `Select fields` para limitar el reemplazo a esos campos. Las cadenas vacías que PDI no interprete como nulas pueden requerir una regla adicional.
 
-![Figura X. Configuracion If fiel value is null](figuras/parte%202/configuracion_if_field_value_is_null.png)
-**Figura X.** Configuración de la transformación If field value is null para el tratamiento de valores nulos en los datos de Netflix.
+![Figura 8. Configuracion If fiel value is null](figuras/parte%202/configuracion_if_field_value_is_null.png)
+**Figura 8.** Configuración de la transformación If field value is null para el tratamiento de valores nulos en los datos de Netflix.
 
 #### 4.2.7. Integración de las fuentes con Stream Lookup
 
@@ -289,8 +289,8 @@ La configuración observada en Spoon utiliza:
 | Valor por defecto 2 | `Sin equivalencia` |
 | Tipo de ambos resultados | `String` |
 
-![Figura X. Configuración de Stream Lookup](figuras/parte%202/configuracion_stream_lookup.png)
-**Figura X.** Claves y campos de recuperación configurados en `Stream Lookup`.
+![Figura 9. Configuración de Stream Lookup](figuras/parte%202/configuracion_stream_lookup.png)
+**Figura 9.** Claves y campos de recuperación configurados en `Stream Lookup`.
 
 Como la clave `rating_limpio` es de tipo **String**, no corresponde activar la optimización *Key and value are exactly one integer field*.
 
@@ -302,8 +302,8 @@ Como la clave `rating_limpio` es de tipo **String**, no corresponde activar la o
 
 Los campos de interés en la salida son `show_id`, `title`, `titulo_limpio`, `director_limpio`, `pais_limpio`, `rating_limpio`, `categoria_audiencia_final` y `descripcion_rating`.
 
-![Figura X. Configuracion del archivo de salida](figuras/parte%202/configuracion_salida.png)
-**Figura X.** Configuración de la salida.
+![Figura 10. Configuracion del archivo de salida](figuras/parte%202/configuracion_salida.png)
+**Figura 10.** Configuración de la salida.
 
 #### 4.2.9. Resultado esperado y verificación
 
@@ -327,9 +327,9 @@ Los conteos finales deben confirmarse con los resultados de ejecución de Pentah
 
 **Archivo de salida:** [salida_netflix.xls](output/parte%202/salida_netflix.xls)
 
-![Figura X. Archivo de salida](figuras/parte%202/salida_excel.png)
+![Figura 11. Archivo de salida](figuras/parte%202/salida_excel.png)
 
-**Figura X.** Resultado del proceso ETL con los datos limpios y las categorías de audiencia integradas.
+**Figura 11.** Resultado del proceso ETL con los datos limpios y las categorías de audiencia integradas.
 
 ## 5. Validación y evidencias
 
