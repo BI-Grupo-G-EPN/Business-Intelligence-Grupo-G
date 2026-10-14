@@ -157,11 +157,11 @@ flowchart TD
 
 **Figura 4.** Flujo ETL del procesamiento de estudiantes.
 
-La Figura 5 muestra la lectura del Excel y la Figura 6 permite comparar los textos y fechas antes de completar su estandarización. La secuencia de conexiones debe contrastarse con el archivo `.ktr`, que no se encuentra en esta carpeta.
+La Figura 5 muestra la lectura del Excel y la Figura 6 permite comparar los textos y fechas antes de completar su estandarización.
 
 ![Configuración de lectura del Excel](figuras/parte%201/configuracion_excel_input.png)
 
-**Figura 5.** Configuración del paso `Staging`, con encabezado y codificación ISO-8859-1. Esta selección está documentada, pero por sí sola no demuestra la causa de los caracteres alterados.
+**Figura 5.** Configuración del paso `Staging`, con encabezado y codificación ISO-8859-1.
 
 ![Vista de los datos de estudiantes](figuras/parte%201/vista_datos_estudiantes.png)
 
@@ -193,7 +193,7 @@ La configuración de `Replace in string`, denominada `Calidad de datos`, incluye
 
 ![Reglas de calidad de datos](figuras/parte%201/configuracion_calidad_datos.png)
 
-**Figura 7.** Reglas de sustitución para limpiar caracteres y homogeneizar los estados académicos; las filas finales incluyen el tratamiento de fechas.
+**Figura 7.** Reglas de sustitución para limpiar caracteres y homogeneizar los estados académicos.
 
 #### 4.1.4 Transformación 2: validación de fechas
 
@@ -443,10 +443,15 @@ En esta práctica **la salida es un archivo Excel, no un Data Warehouse implemen
 
 ## 7. Conclusiones
 
-1. El desarrollo de la parte 1 de la práctica permitió identificar que la limpieza de nombres y apellidos requiere reglas controladas tomando en consideración que algunos caracteres anómalos son ambiguos y no deben sustituirse de forma automática sin evidencia.
-2. La variabilidad de fechas demuestra la importancia de diferenciar formato visual, datos textuales y fórmulas antes de estandarizar la información.
-3. En el desarrollo de la parte 2 se diseñó una integración de dos fuentes mediante `Stream Lookup` y las dos transformaciones seleccionadas corresponden a estandarización de texto y tratamiento de nulos.
-4. Ambos procesos ilustran la función del ETL como preparación y control de calidad previa a una posible arquitectura de Data Warehouse.
+1. Se implementaron procesos ETL en Pentaho Data Integration mediante Spoon para leer fuentes Excel, CSV y JSON, aplicar transformaciones y generar archivos Excel de salida.
+
+2. La revisión de los registros de estudiantes permitió identificar caracteres alterados en nombres y apellidos, formatos de fecha heterogéneos y celdas con fórmulas. Estos hallazgos evidenciaron que la calidad de los datos debe evaluarse antes de transformarlos, pues eliminar símbolos o uniformar su presentación no garantiza recuperar el contenido correcto.
+
+3. En la Parte 1 se aplicaron sustituciones de texto, normalización de estados y reglas para reorganizar las fechas, conservando el archivo fuente para comparar los resultados. Sin embargo, la corrección de nombres y la validación de fechas se alcanzaron parcialmente: los caracteres eliminados no recuperaron las letras originales y aún deben comprobarse las fechas ambiguas y los resultados de las fórmulas.
+
+4. Se extrajeron las dos fuentes de Netflix: un CSV de 8.807 registros y un catálogo JSON de 14 clasificaciones. Su procesamiento demostró que fuentes con estructuras diferentes pueden integrarse mediante una clave común, en este caso la correspondencia entre `rating_limpio` y `codigo_rating`.
+
+5. La combinación de `String Operations`, `If field value is null` y `Stream Lookup` permitió estandarizar textos, asignar valores de sustitución a los campos nulos e incorporar categorías de audiencia. La conservación de los campos originales junto con los campos procesados facilitó la comparación y la trazabilidad de las transformaciones de Netflix.
 
 ## 8. Referencias bibliográficas
 
