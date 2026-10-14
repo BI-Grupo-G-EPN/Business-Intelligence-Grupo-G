@@ -255,8 +255,8 @@ La línea punteada representa el **information hop** desde `JSON Categorias` hac
 | `rating` | `rating_limpio` | `Trim = both` |
 
 Se conserva mayúsculas y minúsculas (`Lower/Upper = none`). Esta operación corresponde a **estandarización textual**.
-
 ![Figura 7. Configuracion String operation](figuras/parte%202/configuracion_string_operation.png)
+
 **Figura 7.** Configuración de la transformación String Operations para la limpieza y estandarización de campos de texto del dataset de Netflix.
 
 #### 4.2.6. Segunda transformación: If field value is null
@@ -272,6 +272,7 @@ Se conserva mayúsculas y minúsculas (`Lower/Upper = none`). Esta operación co
 Se utiliza `Select fields` para limitar el reemplazo a esos campos. Las cadenas vacías que PDI no interprete como nulas pueden requerir una regla adicional.
 
 ![Figura 8. Configuracion If fiel value is null](figuras/parte%202/configuracion_if_field_value_is_null.png)
+
 **Figura 8.** Configuración de la transformación If field value is null para el tratamiento de valores nulos en los datos de Netflix.
 
 #### 4.2.7. Integración de las fuentes con Stream Lookup
@@ -290,6 +291,7 @@ La configuración observada en Spoon utiliza:
 | Tipo de ambos resultados | `String` |
 
 ![Figura 9. Configuración de Stream Lookup](figuras/parte%202/configuracion_stream_lookup.png)
+
 **Figura 9.** Claves y campos de recuperación configurados en `Stream Lookup`.
 
 Como la clave `rating_limpio` es de tipo **String**, no corresponde activar la optimización *Key and value are exactly one integer field*.
@@ -303,6 +305,7 @@ Como la clave `rating_limpio` es de tipo **String**, no corresponde activar la o
 Los campos de interés en la salida son `show_id`, `title`, `titulo_limpio`, `director_limpio`, `pais_limpio`, `rating_limpio`, `categoria_audiencia_final` y `descripcion_rating`.
 
 ![Figura 10. Configuracion del archivo de salida](figuras/parte%202/configuracion_salida.png)
+
 **Figura 10.** Configuración de la salida.
 
 #### 4.2.9. Resultado esperado y verificación
