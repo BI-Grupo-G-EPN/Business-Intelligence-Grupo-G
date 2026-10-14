@@ -90,6 +90,8 @@ Implementar el proceso **ETL** (Extract, Transform, Load) mediante Pentaho Data 
 
 **Archivos de trabajo:**
 
+**Tabla 1.** Archivos utilizados y generados en la práctica.
+
 | Archivo | Formato | Función |
 |---|---|---|
 | `Caso Estudiantes Fechas Cedula.xls` | XLS | [Dataset provisto para la parte 1](input/parte%201/Caso%20Estudiantes%20Fechas%20Cedula.xls) |
@@ -106,6 +108,8 @@ Implementar el proceso **ETL** (Extract, Transform, Load) mediante Pentaho Data 
 **Fuente:** `Caso Estudiantes Fechas Cedula.xls`, archivo proporcionado para la práctica.
 
 Los problemas observados son los siguientes:
+
+**Tabla 2.** Problemas identificados en los datos de estudiantes.
 
 | Campo | Problema | Ejemplo o condición | Riesgo |
 |---|---|---|---|
@@ -146,7 +150,7 @@ flowchart TD
     D --> E[Microsoft Excel Writer: salida estudiantes]
 ```
 
-> **[POR CONFIRMAR CON EL COMPAÑERO]** Este diagrama representa el **flujo metodológico previsto**. Sustituirlo o ajustarlo según los pasos, nombres y conexiones reales del archivo `.ktr` que desarrolló el compañero. La guía exige dos transformaciones: corrección de nombres/apellidos y validación de fechas; no exige un componente específico para lograrlas.
+> Este diagrama representa el **flujo metodológico previsto**. Sustituirlo o ajustarlo según los pasos, nombres y conexiones reales del archivo `.ktr` que desarrolló el compañero. La guía exige dos transformaciones: corrección de nombres/apellidos y validación de fechas; no exige un componente específico para lograrlas.
 
 #### 4.1.3. Transformación 1: nombres y apellidos
 
@@ -159,13 +163,14 @@ flowchart TD
 3. Corregir `~` por `Ñ` o `ñ` cuando el contexto y el uso de mayúsculas lo permitan.
 4. **No reemplazar automáticamente `\|\|` por una sola vocal**, porque no permite identificar cuál tilde corresponde. Registrar esos casos para revisión o usar un diccionario de equivalencias comprobadas.
 
+**Tabla 3.** Ejemplos de limpieza de nombres y apellidos.
+
 | Valor original (ilustrativo) | Resultado esperado | Regla |
 |---|---|---|
 | `  PE~A  ` | `PEÑA` | Recortar espacios y corregir ñ |
 | `MU~OZ` | `MUÑOZ` | Corregir ñ |
 | `MAR\|\|A` | `REVISAR` | Tilde ambigua; requiere revisión |
 
-**Evidencia pendiente:** [POR COMPLETAR: captura del componente configurado, vista previa antes/después y conteo de registros corregidos].
 
 #### 4.1.4 Transformación 2: validación de fechas
 
@@ -175,6 +180,8 @@ El campo `FECHA ESTADO` puede contener texto, fechas con año de dos o cuatro ci
 
 **Propuesta de campos de salida:** `FECHA_ESTADO_ORIGINAL`, `FECHA_NORMALIZADA` (formato `yyyy-MM-dd`) y `ESTADO_VALIDACION`.
 
+**Tabla 4.** Ejemplos de evaluación y validación de fechas.
+
 | Valor fuente | Evaluación | Acción recomendada |
 |---|---|---|
 | `05/27/15` | Compatible con mes/día/año | `2015-05-27` si se confirma esa convención |
@@ -182,16 +189,15 @@ El campo `FECHA ESTADO` puede contener texto, fechas con año de dos o cuatro ci
 | `02/30/15` | Fecha imposible | Marcar inválida |
 | `=+G12+1100` | Fórmula de Excel | Comprobar el resultado y el tipo leído por PDI |
 
-**Evidencia pendiente:** [POR COMPLETAR: componente real usado por el compañero, reglas implementadas, ejemplos verificados y cantidad de fechas válidas/erróneas].
 
 #### 4.1.5. Salida y validación de la parte 1
 
-- **Salida:** [POR COMPLETAR: nombre exacto, formato, hoja y ubicación del archivo generado].
-- **Registros de entrada:** [POR COMPLETAR].
-- **Registros de salida:** [POR COMPLETAR].
-- **Nombres/apellidos corregidos:** [POR COMPLETAR].
-- **Fechas válidas, inválidas, ambiguas o sujetas a revisión:** [POR COMPLETAR].
-- **Evidencias:** [POR COMPLETAR: captura de ejecución en Spoon y archivo de salida abierto].
+- **Salida:** archivo Excel 97-2003 [`resultado_estandarizado.xls`](output/parte%201/resultado_estandarizado.xls), hoja `Sheet1`.
+- **Registros de entrada:** 99 registros, sin contar la fila de encabezados.
+- **Registros de salida:** 99 registros, sin contar la fila de encabezados; la cantidad coincide con la entrada.
+- **Nombres/apellidos:** se detectaron cambios en 13 registros. Sin embargo, en la salida los caracteres `~` y `||` fueron eliminados sin recuperar la letra o tilde correspondiente (por ejemplo, `Mu~oz` quedó como `Muoz`); por tanto, esos casos aún requieren corrección y revisión, y no deben reportarse como corregidos satisfactoriamente.
+- **Fechas:** la salida contiene 99 valores no vacíos con apariencia normalizada. No se puede confirmar cuántos son válidos, inválidos o ambiguos solo con esa apariencia: 96 celdas de fecha del archivo fuente contienen fórmulas, por lo que deben comprobarse sus resultados y la convención de fechas antes de clasificarlas. La cantidad por categoría queda pendiente de esa validación.
+- **Evidencias:** el archivo de salida está disponible en el enlace anterior. Las capturas del archivo fuente muestran [nombres](figuras/parte%201/nombres_excel.png), [fechas](figuras/parte%201/fechas_excel.png) y [fórmulas](figuras/parte%201/formulas_excel.png); falta agregar una captura de la ejecución en Spoon y una del archivo de salida abierto.
 
 **Criterio de aceptación:** comparar cada dato original con el dato transformado, verificar las correcciones justificables y conservar señalados los casos ambiguos, sin inventar tildes ni fechas.
 
@@ -206,6 +212,8 @@ El campo `FECHA ESTADO` puede contener texto, fechas con año de dos o cuatro ci
 #### 4.2.2. Problemas encontrados en los datos
 
 La revisión de los archivos mostró la siguiente distribución del campo `rating`:
+
+**Tabla 5.** Distribución de los valores del campo `rating` en el CSV.
 
 | Situación | Cantidad | Observación |
 |---|---:|---|
@@ -247,6 +255,8 @@ La línea punteada representa el **information hop** desde `JSON Categorias` hac
 
 **Objetivo:** eliminar espacios sobrantes al inicio y al final de varios campos sin reemplazar los datos originales.
 
+**Tabla 6.** Campos procesados mediante String Operations.
+
 | Campo de entrada | Campo nuevo | Operación |
 |---|---|---|
 | `title` | `titulo_limpio` | `Trim = both` |
@@ -263,6 +273,8 @@ Se conserva mayúsculas y minúsculas (`Lower/Upper = none`). Esta operación co
 
 **Objetivo:** gestionar valores faltantes en los campos procesados.
 
+**Tabla 7.** Valores sustitutos para campos nulos.
+
 | Campo | Valor sustituto |
 |---|---|
 | `director_limpio` | `No especificado` |
@@ -277,6 +289,8 @@ Se utiliza `Select fields` para limitar el reemplazo a esos campos. Las cadenas 
 #### 4.2.7. Integración de las fuentes con Stream Lookup
 
 La configuración observada en Spoon utiliza:
+
+**Tabla 8.** Configuración de Stream Lookup.
 
 | Elemento | Configuración |
 |---|---|
@@ -334,6 +348,8 @@ Los conteos finales deben confirmarse con los resultados de ejecución de Pentah
 ## 5. Validación y evidencias
 
 ### 5.1. Tabla de evidencias por actividad
+
+**Tabla 9.** Evidencias disponibles y pendientes por actividad.
 
 | Actividad | Evidencia | Estado |
 |---|---|---|
