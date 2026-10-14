@@ -13,7 +13,7 @@
 
 <hr>
 
-**Integrantes**
+**Integrantes Grupo G**
 
 - Erick Caicedo
 - Nahomy Llumiquinga
@@ -39,14 +39,14 @@ Práctica 1: Implementación de un proceso ETL y Staging Area con Pentaho Data I
 - [4. Desarrollo](#4-desarrollo)
   - [4.1 Parte 1: Transformaciones al dataset provisto](#41-parte-1-transformaciones-al-dataset-provisto)
     - [4.1.1. Fuente y problemas identificados](#411-fuente-y-problemas-identificados)
-    - [4.1.2. Flujo ETL de la parte 1](#412-flujo-etl-de-la-parte-1)
+    - [4.1.2. Flujo ETL](#412-flujo-etl)
     - [4.1.3. Transformación 1: nombres y apellidos](#413-transformación-1-nombres-y-apellidos)
     - [4.1.4 Transformación 2: validación de fechas](#414-transformación-2-validación-de-fechas)
     - [4.1.5. Salida y validación de la parte 1](#415-salida-y-validación-de-la-parte-1)
   - [4.2. Parte 2: Diseño y ejecución de un proceso ETL](#42-parte-2-diseño-y-ejecución-de-un-proceso-etl)
     - [4.2.1 Fuentes de datos utilizadas](#421-fuentes-de-datos-utilizadas)
     - [4.2.2. Problemas encontrados en los datos](#422-problemas-encontrados-en-los-datos)
-    - [4.2.3. Flujo ETL desarrollado](#423-flujo-etl-desarrollado)
+    - [4.2.3. Flujo ETL](#423-flujo-etl)
     - [4.2.4. Extracción](#424-extracción)
     - [4.2.5. Primera transformación: String Operations](#425-primera-transformación-string-operations)
     - [4.2.6. Segunda transformación: If field value is null](#426-segunda-transformación-if-field-value-is-null)
@@ -64,11 +64,11 @@ Práctica 1: Implementación de un proceso ETL y Staging Area con Pentaho Data I
 
 ## 1. Introducción
 
-La integración de datos mediante **ETL (Extract, Transform, Load)** permite extraer información de fuentes de datos, detectar inconsistencias y aplicar reglas de limpieza y normalización para cargarlos en un almacén de datos. 
+La integración de datos mediante **ETL (Extract, Transform, Load)** permite extraer información de fuentes de datos, detectar inconsistencias y aplicar reglas de limpieza y normalización para cargarlos en un almacén de datos [1]. 
 
-La presente práctica se desarrolla en **Pentaho Data Integration (Spoon)** y se divide en dos partes: En la primera se realiza la corrección de nombres y apellidos y validación de fechas en un archivo de estudiantes y en la segunda se desarrolla la integración de dos tipos de fuente, CSV y JSON, mediante transformaciones de limpieza y una salida procesada.
+Pentaho Data Integration permite diseñar transformaciones y trabajos ETL mediante su cliente gráfico Spoon [2]. La presente práctica sigue la guía de clase [3] y se divide en dos partes: En la primera se realiza la corrección de nombres y apellidos y validación de fechas en un archivo de estudiantes y en la segunda se desarrolla la integración de dos tipos de fuente, CSV y JSON, mediante transformaciones de limpieza y una salida procesada.
 
-En la práctica se implementó la versión simplificada del proceso de integración de datos: **Fuente de datos → Staging Area → Transformación → Destino**.
+En la práctica se implementó la versión simplificada del proceso de integración de datos: **Fuente de datos → Staging Area → Transformación → Destino** [1].
 
 ## 2. Objetivos
 
@@ -86,9 +86,11 @@ Implementar el proceso **ETL** (Extract, Transform, Load) mediante Pentaho Data 
   
 ## 3. Herramientas y fuentes
 
-**Herramientas:** Pentaho Data Integration (Spoon).
+**Herramientas:** Pentaho Data Integration (Spoon) [2].
 
 **Archivos de trabajo:**
+
+La Tabla 1 reúne las fuentes y salidas de ambas partes y permite ubicar los archivos utilizados para reproducir la práctica.
 
 **Tabla 1.** Archivos utilizados y generados en la práctica.
 
@@ -105,9 +107,9 @@ Implementar el proceso **ETL** (Extract, Transform, Load) mediante Pentaho Data 
 
 #### 4.1.1. Fuente y problemas identificados
 
-**Fuente:** `Caso Estudiantes Fechas Cedula.xls`, archivo proporcionado para la práctica.
+**Fuente:** `Caso Estudiantes Fechas Cedula.xls`, archivo proporcionado para la práctica descrita en la guía de clase [3].
 
-Los problemas observados son los siguientes:
+La Tabla 2 relaciona las anomalías de texto y fechas con el riesgo de alterar la interpretación de los datos.
 
 **Tabla 2.** Problemas identificados en los datos de estudiantes.
 
@@ -127,6 +129,7 @@ Los problemas observados son los siguientes:
 **Figura 1.** Inconsistencias en nombres y apellidos.
 
 <!-- ![Figura 2. Variabilidad de fechas](figuras/parte%201/fechas_excel.png) -->
+
 <img src="figuras/parte%201/fechas_excel.png"
      alt="Variabilidad de fechas"
      width="250">
@@ -134,34 +137,48 @@ Los problemas observados son los siguientes:
 **Figura 2.** Ejemplos de fechas con presentaciones diferentes en el Excel original.
 
 <!-- ![Figura 3. Fórmula de Excel en FECHA ESTADO](figuras/parte%201/formulas_excel.png) -->
+
 <img src="figuras/parte%201/formulas_excel.png"
      alt="Fórmula de Excel en FECHA ESTADO"
      width="280">
 
 **Figura 3.** Ejemplo de una celda con fórmula en la columna de fechas.
 
-#### 4.1.2. Flujo ETL de la parte 1
+#### 4.1.2. Flujo ETL
+
+La Figura 4 presenta las etapas del procesamiento de estudiantes: lectura del Excel, limpieza de textos y estados, ajuste de los campos de fecha y generación del archivo de salida.
 
 ```mermaid
 flowchart TD
-    A[Microsoft Excel Input: estudiantes XLS] --> B[String Operations: espacios y mayúsculas]
-    B --> C[Replace in String: caracteres especiales]
-    C --> D[Validación de fechas: revisar formato y valores]
-    D --> E[Microsoft Excel Writer: salida estudiantes]
+    A[Microsoft Excel Input: Staging] --> B[Replace in string: Calidad de datos]
+    B --> C[Select values: metadatos de fechas]
+    C --> D[Microsoft Excel Writer: resultado_estandarizado.xls]
 ```
 
-> Este diagrama representa el **flujo metodológico previsto**. Sustituirlo o ajustarlo según los pasos, nombres y conexiones reales del archivo `.ktr` que desarrolló el compañero. La guía exige dos transformaciones: corrección de nombres/apellidos y validación de fechas; no exige un componente específico para lograrlas.
+**Figura 4.** Flujo ETL del procesamiento de estudiantes.
+
+La Figura 5 muestra la lectura del Excel y la Figura 6 permite comparar los textos y fechas antes de completar su estandarización.
+
+![Configuración de lectura del Excel](figuras/parte%201/configuracion_excel_input.png)
+
+**Figura 5.** Configuración del paso `Staging`, con encabezado y codificación ISO-8859-1.
+
+![Vista de los datos de estudiantes](figuras/parte%201/vista_datos_estudiantes.png)
+
+**Figura 6.** Vista de estudiantes con pérdida de caracteres en nombres y fechas que mezclan órdenes de componentes y horas como `0:00` y `00:00:00.000`.
 
 #### 4.1.3. Transformación 1: nombres y apellidos
 
-**Propósito:** uniformar el texto de los nombres sin perder los valores originales.
+El propósito es que el texto de los nombres sean uniformes sin perder los valores originales.
 
 **Reglas consideradas:**
 
-1. Eliminar espacios al principio y al final mediante `String Operations`.
+1. Eliminar espacios al principio y al final mediante `String Operations`, que permite guardar el resultado en un campo nuevo [4].
 2. Normalizar las mayúsculas/minúsculas según el formato definido para el conjunto de datos.
 3. Corregir `~` por `Ñ` o `ñ` cuando el contexto y el uso de mayúsculas lo permitan.
-4. **No reemplazar automáticamente `\|\|` por una sola vocal**, porque no permite identificar cuál tilde corresponde. Registrar esos casos para revisión o usar un diccionario de equivalencias comprobadas.
+4. No reemplazar automáticamente `\|\|` por una sola vocal, porque no permite identificar cuál tilde corresponde. Registrar esos casos para revisión o usar un diccionario de equivalencias comprobadas.
+
+La Tabla 3 ilustra las correcciones y los casos ambiguos que requieren revisión.
 
 **Tabla 3.** Ejemplos de limpieza de nombres y apellidos.
 
@@ -172,13 +189,21 @@ flowchart TD
 | `MAR\|\|A` | `REVISAR` | Tilde ambigua; requiere revisión |
 
 
+La configuración de `Replace in string`, denominada `Calidad de datos`, incluye reglas sobre `NOMBRES`, `APELLIDOS` y `ESTADO ACTUAL` (Figura 7). En los nombres se sustituyen `~` y `||` por un valor vacío; esto elimina los símbolos, pero no recupera las letras perdidas. Para los estados se unifican variantes como `egresado`, `Egresado` y `EGR` en `EGRESADO`, y `Graduado`, `graduado` y `GRD` en `GRADUADO`.
+
+![Reglas de calidad de datos](figuras/parte%201/configuracion_calidad_datos.png)
+
+**Figura 7.** Reglas de sustitución para limpiar caracteres y homogeneizar los estados académicos.
+
 #### 4.1.4 Transformación 2: validación de fechas
 
-**Propósito:** identificar fechas interpretables e identificar los casos que no pueden convertirse con certeza.
+En la segunda transformación se trata de estandarizar el formato de fecha.
 
-El campo `FECHA ESTADO` puede contener texto, fechas con año de dos o cuatro cifras, valores ambiguos y resultados de fórmulas. La validación debe distinguir entre **fecha imposible**, **fecha no reconocida** y **fecha con interpretación ambigua**. Se debe establecer y documentar una convención de origen antes de normalizar fechas como `01/05/15`, que podría representar dos fechas distintas según el orden día/mes.
+El campo `FECHA ESTADO` presentaba texto, fechas con año de dos o cuatro cifras, valores ambiguos y resultados de fórmulas. La validación permitió distinguir entre **fecha imposible**, **fecha no reconocida** y **fecha con interpretación ambigua**. Se estableció una convención de origen antes de normalizar fechas como `01/05/15`, que podría representar dos fechas distintas según el orden día/mes.
 
 **Propuesta de campos de salida:** `FECHA_ESTADO_ORIGINAL`, `FECHA_NORMALIZADA` (formato `yyyy-MM-dd`) y `ESTADO_VALIDACION`.
+
+La Tabla 4 distingue fechas interpretables, ambiguas e imposibles y señala la comprobación necesaria para las fórmulas.
 
 **Tabla 4.** Ejemplos de evaluación y validación de fechas.
 
@@ -190,28 +215,38 @@ El campo `FECHA ESTADO` puede contener texto, fechas con año de dos o cuatro ci
 | `=+G12+1100` | Fórmula de Excel | Comprobar el resultado y el tipo leído por PDI |
 
 
+En `Select values` ambos campos se configuran como `String` con formato `yyyy/MM/dd` (Figura 8). Al conservar el tipo texto, esta configuración no demuestra por sí sola que las fechas sean válidas.
+
+![Metadatos de fechas](figuras/parte%201/configuracion_select_values.png)
+
+**Figura 8.** Configuración de los campos de fecha en `Select values`, con tipo `String` y formato declarado `yyyy/MM/dd`.
+
+`Replace in string` muestra una expresión regular con alternativas para fechas que empiezan por día o por año y el reemplazo `$3$4/$2$5/$1$6` (Figura 9). Los grupos de captura reordenan los componentes y el patrón descarta el texto posterior, incluidas horas y milisegundos. 
+
+![Reglas de fechas con expresiones regulares](figuras/parte%201/regex_fechas.png)
+
+**Figura 9.** Detalle de las reglas RegEx para reorganizar las fechas de admisión y estado y retirar las horas sobrantes.
+
 #### 4.1.5. Salida y validación de la parte 1
 
 - **Salida:** archivo Excel 97-2003 [`resultado_estandarizado.xls`](output/parte%201/resultado_estandarizado.xls), hoja `Sheet1`.
 - **Registros de entrada:** 99 registros, sin contar la fila de encabezados.
 - **Registros de salida:** 99 registros, sin contar la fila de encabezados; la cantidad coincide con la entrada.
-- **Nombres/apellidos:** se detectaron cambios en 13 registros. Sin embargo, en la salida los caracteres `~` y `||` fueron eliminados sin recuperar la letra o tilde correspondiente (por ejemplo, `Mu~oz` quedó como `Muoz`); por tanto, esos casos aún requieren corrección y revisión, y no deben reportarse como corregidos satisfactoriamente.
+- **Nombres/apellidos:** se detectaron cambios en 13 registros. Sin embargo, en la salida los caracteres `~` y `||` fueron eliminados sin recuperar la letra o tilde correspondiente (por ejemplo, `Mu~oz` quedó como `Muoz`); por tanto, esos casos aún requieren corrección y revisión y no deben reportarse como corregidos satisfactoriamente.
 - **Fechas:** la salida contiene 99 valores no vacíos con apariencia normalizada. No se puede confirmar cuántos son válidos, inválidos o ambiguos solo con esa apariencia: 96 celdas de fecha del archivo fuente contienen fórmulas, por lo que deben comprobarse sus resultados y la convención de fechas antes de clasificarlas. La cantidad por categoría queda pendiente de esa validación.
-- **Evidencias:** el archivo de salida está disponible en el enlace anterior. Las capturas del archivo fuente muestran [nombres](figuras/parte%201/nombres_excel.png), [fechas](figuras/parte%201/fechas_excel.png) y [fórmulas](figuras/parte%201/formulas_excel.png); falta agregar una captura de la ejecución en Spoon y una del archivo de salida abierto.
-
-**Criterio de aceptación:** comparar cada dato original con el dato transformado, verificar las correcciones justificables y conservar señalados los casos ambiguos, sin inventar tildes ni fechas.
+- **Evidencias:** archivo [`resultado_estandarizado.xls`](output/parte%201/resultado_estandarizado.xls). Las Figuras 5 a 9 complementan la configuración y el tratamiento de datos.
 
 ### 4.2. Parte 2: Diseño y ejecución de un proceso ETL
 
 #### 4.2.1 Fuentes de datos utilizadas
 
-- **Fuente 1 (CSV):** `netflix_titles.csv`, dataset *Netflix Movies and TV Shows*. Contiene **8.807 registros** y **12 columnas**: `show_id`, `type`, `title`, `director`, `cast`, `country`, `date_added`, `release_year`, `rating`, `duration`, `listed_in` y `description`.
+- **Fuente 1 (CSV):** `netflix_titles.csv`, dataset *Netflix Movies and TV Shows*, publicado por S. Bansal en Kaggle [5]. La copia utilizada contiene **8.807 registros** y **12 columnas**: `show_id`, `type`, `title`, `director`, `cast`, `country`, `date_added`, `release_year`, `rating`, `duration`, `listed_in` y `description`.
 
-- **Fuente 2 — JSON:** `categorias_netflix.json`, catálogo complementario para la clasificación de audiencia. Contiene **14 objetos** con: `codigo_rating`, `categoria_audiencia`, `descripcion` y `registros_csv`.
+- **Fuente 2 (JSON):** `categorias_netflix.json`, catálogo complementario elaborado por el Grupo G para la clasificación de audiencia [6]. Contiene **14 objetos** con: `codigo_rating`, `categoria_audiencia`, `descripcion` y `registros_csv`.
 
 #### 4.2.2. Problemas encontrados en los datos
 
-La revisión de los archivos mostró la siguiente distribución del campo `rating`:
+La Tabla 5 resume la correspondencia con el catálogo: 8.800 registros tienen una clave reconocida y 7 requieren revisión.
 
 **Tabla 5.** Distribución de los valores del campo `rating` en el CSV.
 
@@ -224,8 +259,9 @@ La revisión de los archivos mostró la siguiente distribución del campo `ratin
 
 Se comprobó también que el catálogo incluye 14 claves de clasificación donde los 7 registros que no coinciden se marcaron para revisión, no se eliminaron.
 
-#### 4.2.3. Flujo ETL desarrollado
+#### 4.2.3. Flujo ETL
 
+La Figura 10 muestra cómo se limpian los datos del CSV de Netflix, se completan los valores nulos y se consulta el catálogo JSON para incorporar las categorías de audiencia antes de generar el Excel final.
 ```mermaid
 flowchart TD
     A[CSV File Input: netflix_titles.csv] --> B[String Operations: limpieza de texto]
@@ -235,25 +271,33 @@ flowchart TD
     D --> E[Microsoft Excel Writer: salida_netflix.xls]
     E --> F[Validación de conteos y calidad]
 ```
+**Figura 10.** Flujo ETL de la integración de datos de Netflix.
 
-La línea punteada representa el **information hop** desde `JSON Categorias` hacia `Stream Lookup`, que entrega datos complementarios para la búsqueda sin unir simplemente los dos flujos de registros (Figura).
+La línea punteada representa el information hop desde `JSON Categorias` hacia `Stream Lookup`, que entrega datos complementarios para la búsqueda sin unir simplemente los dos flujos de registros (Figura 11).
 
-![Figura 4. Information hop](figuras/parte%202/lookup_information_hop.png)
-**Figura 4.** Conexión de información (*information hop*) usada por `Stream Lookup`.
+![Figura 11. Information hop](figuras/parte%202/lookup_information_hop.png)
+
+**Figura 11.** Conexión de información (*information hop*) usada por `Stream Lookup`.
 
 #### 4.2.4. Extracción
 
-1. En `CSV File Input` se lee `netflix_titles.csv` con separador coma, comillas como delimitador de texto, cabecera y codificación UTF-8 (Figura).
-![Figura 5. Extracción csv](figuras/parte%202/extraccion_csv.png)
-**Figura 5.** Extracción de datos de `netflix_titles.csv`.
+1. En `CSV File Input` se lee `netflix_titles.csv` con separador coma, comillas como delimitador de texto, cabecera y codificación UTF-8 (Figura 12).
 
-1. En `JSON Input` se lee `categorias_netflix.json` y se extraen las propiedades `codigo_rating`, `categoria_audiencia`, `descripcion` y `registros_csv` (Figura).
-![Figura 6. Extracción json](figuras/parte%202/extraccion_json.png)
-**Figura 6.** Extracción de datos de `categorias_netflix.json`.
+![Figura 12. Extracción csv](figuras/parte%202/extraccion_csv.png)
+
+**Figura 12.** Extracción de datos de `netflix_titles.csv`.
+
+2. En `JSON Input` se lee `categorias_netflix.json` y se extraen las propiedades `codigo_rating`, `categoria_audiencia`, `descripcion` y `registros_csv` (Figura 13).
+
+![Figura 13. Extracción json](figuras/parte%202/extraccion_json.png)
+
+**Figura 13.** Extracción de datos de `categorias_netflix.json`.
 
 #### 4.2.5. Primera transformación: String Operations
 
-**Objetivo:** eliminar espacios sobrantes al inicio y al final de varios campos sin reemplazar los datos originales.
+Se eliminan espacios sobrantes al inicio y al final de varios campos y se guardan los resultados en campos nuevos mediante `String Operations` [4].
+
+La Tabla 6 relaciona los campos originales con sus versiones limpias, conservando ambos para facilitar la comparación.
 
 **Tabla 6.** Campos procesados mediante String Operations.
 
@@ -264,14 +308,15 @@ La línea punteada representa el **information hop** desde `JSON Categorias` hac
 | `country` | `pais_limpio` | `Trim = both` |
 | `rating` | `rating_limpio` | `Trim = both` |
 
-Se conserva mayúsculas y minúsculas (`Lower/Upper = none`). Esta operación corresponde a **estandarización textual**.
-![Figura 7. Configuracion String operation](figuras/parte%202/configuracion_string_operation.png)
+Se conserva mayúsculas y minúsculas (`Lower/Upper = none`). Esta operación corresponde a la estandarización textual. La Figura 14 muestra los campos seleccionados para eliminar espacios sobrantes.
 
-**Figura 7.** Configuración de la transformación String Operations para la limpieza y estandarización de campos de texto del dataset de Netflix.
+![Figura 14. Configuracion String operation](figuras/parte%202/configuracion_string_operation.png)
+
+**Figura 14.** Configuración de la transformación String Operations para la limpieza y estandarización de campos de texto del dataset de Netflix.
 
 #### 4.2.6. Segunda transformación: If field value is null
 
-**Objetivo:** gestionar valores faltantes en los campos procesados.
+Se gestiona valores faltantes en los campos procesados. La Tabla 7 define los textos de sustitución que permiten identificar los datos faltantes sin eliminar registros.
 
 **Tabla 7.** Valores sustitutos para campos nulos.
 
@@ -281,15 +326,15 @@ Se conserva mayúsculas y minúsculas (`Lower/Upper = none`). Esta operación co
 | `pais_limpio` | `No especificado` |
 | `rating_limpio` | `SIN_CLASIFICACION` |
 
-Se utiliza `Select fields` para limitar el reemplazo a esos campos. Las cadenas vacías que PDI no interprete como nulas pueden requerir una regla adicional.
+Se utiliza `Select fields` para limitar el reemplazo a esos campos. Las cadenas vacías que el programa no interprete como nulas pueden requerir una regla adicional. La Figura 15 muestra los reemplazos definidos para los campos con valores nulos.
 
-![Figura 8. Configuracion If fiel value is null](figuras/parte%202/configuracion_if_field_value_is_null.png)
+![Figura 15. Configuracion If fiel value is null](figuras/parte%202/configuracion_if_field_value_is_null.png)
 
-**Figura 8.** Configuración de la transformación If field value is null para el tratamiento de valores nulos en los datos de Netflix.
+**Figura 15.** Configuración de la transformación If field value is null para el tratamiento de valores nulos en los datos de Netflix.
 
 #### 4.2.7. Integración de las fuentes con Stream Lookup
 
-La configuración observada en Spoon utiliza:
+El paso `Stream Lookup` permite recuperar valores de otro flujo de la transformación mediante claves de búsqueda [7]. La Tabla 8 resume la clave de integración, los campos recuperados y los valores usados cuando no existe correspondencia.
 
 **Tabla 8.** Configuración de Stream Lookup.
 
@@ -304,9 +349,11 @@ La configuración observada en Spoon utiliza:
 | Valor por defecto 2 | `Sin equivalencia` |
 | Tipo de ambos resultados | `String` |
 
-![Figura 9. Configuración de Stream Lookup](figuras/parte%202/configuracion_stream_lookup.png)
+La Figura 16 muestra las claves y los valores recuperados al consultar el catálogo.
 
-**Figura 9.** Claves y campos de recuperación configurados en `Stream Lookup`.
+![Figura 16. Configuración de Stream Lookup](figuras/parte%202/configuracion_stream_lookup.png)
+
+**Figura 16.** Claves y campos de recuperación configurados en `Stream Lookup`.
 
 Como la clave `rating_limpio` es de tipo **String**, no corresponde activar la optimización *Key and value are exactly one integer field*.
 
@@ -318,9 +365,11 @@ Como la clave `rating_limpio` es de tipo **String**, no corresponde activar la o
 
 Los campos de interés en la salida son `show_id`, `title`, `titulo_limpio`, `director_limpio`, `pais_limpio`, `rating_limpio`, `categoria_audiencia_final` y `descripcion_rating`.
 
-![Figura 10. Configuracion del archivo de salida](figuras/parte%202/configuracion_salida.png)
+La Figura 17 muestra las opciones de escritura del archivo Excel de salida.
 
-**Figura 10.** Configuración de la salida.
+![Figura 17. Configuracion del archivo de salida](figuras/parte%202/configuracion_salida.png)
+
+**Figura 17.** Configuración de Microsoft Excel Writer para generar el archivo de salida con los datos procesados de Netflix.
 
 #### 4.2.9. Resultado esperado y verificación
 
@@ -344,25 +393,26 @@ Los conteos finales deben confirmarse con los resultados de ejecución de Pentah
 
 **Archivo de salida:** [salida_netflix.xls](output/parte%202/salida_netflix.xls)
 
-![Figura 11. Archivo de salida](figuras/parte%202/salida_excel.png)
+La Figura 18 muestra los datos procesados y las categorías incorporadas en el archivo final.
 
-**Figura 11.** Resultado del proceso ETL con los datos limpios y las categorías de audiencia integradas.
+![Figura 18. Archivo de salida](figuras/parte%202/salida_excel.png)
+
+**Figura 18.** Resultado del proceso ETL con los datos limpios y las categorías de audiencia integradas.
 
 ## 5. Validación y evidencias
 
 ### 5.1. Tabla de evidencias por actividad
 
-**Tabla 9.** Evidencias disponibles y pendientes por actividad.
+La Tabla 9 agrupa las evidencias de ambas partes por etapa del proceso ETL, desde la extracción hasta la carga y verificación de la salida.
 
-| Actividad | Evidencia | Estado |
-|---|---|---|
-| 1 | Archivo original con fechas heterogéneas | Disponible (Figura 2) |
-| 1 | Captura de fórmula en fecha | Disponible (Figura 3) |
-| 2 | Configuración de JSON Input | Disponible (Figura 6) |
-| 2 | Information hop desde JSON | Disponible (Figura 4) |
-| 2 | Configuración de Stream Lookup | Disponible (Figura 9) |
-| 2 | Capturas de las dos limpiezas | Disponible (Figuras 7 y 8) |
-| 2 | Vista previa de integración y XLS final | Disponible (Figuras 10 y 11) |
+**Tabla 9.** Evidencias agrupadas por etapa del proceso ETL.
+
+| Etapa | Evidencias de la Parte 1: estudiantes | Evidencias de la Parte 2: Netflix | Figuras |
+|---|---|---|---|
+| Flujo general | Diagrama del procesamiento de estudiantes | Diagrama de integración de CSV y JSON | Figuras 4 y 10 |
+| Extracción y revisión inicial | Anomalías de nombres y fechas, configuración de lectura y vista de datos | Lectura de las fuentes CSV y JSON | Figuras 1, 2, 3, 5, 6, 12 y 13 |
+| Transformación e integración | Sustitución de textos, normalización de estados y tratamiento de fechas | Limpieza de espacios, tratamiento de nulos y consulta del catálogo con Stream Lookup | Figuras 7, 9, 11, 14 y 16 |
+| Carga y verificación de salida | Sin captura disponible | Configuración de escritura y archivo Excel generado | Figuras 17 y 18 |
 
 ### 5.2. Criterios de calidad
 
@@ -374,7 +424,9 @@ Los conteos finales deben confirmarse con los resultados de ejecución de Pentah
 
 ## 6. Relación con la arquitectura de un Data Warehouse
 
-Un proceso ETL constituye la etapa preparatoria para un entorno de Inteligencia de Negocios. Las fuentes operacionales proporcionan información; el área de staging recibe y prepara los registros; las transformaciones resuelven problemas de calidad e integración; y el resultado puede cargarse posteriormente en un **Data Warehouse** o **Data Mart** para análisis e informes.
+Un proceso ETL constituye la etapa preparatoria para un entorno de Inteligencia de Negocios. Las fuentes operacionales proporcionan información, el área de staging recibe y prepara los registros, las transformaciones resuelven problemas de calidad e integración; y el resultado puede cargarse posteriormente en un **Data Warehouse** o **Data Mart** para análisis e informes [1].
+
+La Figura 19 relaciona las etapas de la práctica con la arquitectura de un Data Warehouse: las fuentes pasan por extracción, staging y transformación hasta obtener archivos procesados que podrían alimentar un almacén de datos.
 
 ```mermaid
 flowchart
@@ -385,22 +437,37 @@ flowchart
     E -. Carga futura .-> F[(Data Warehouse / Data Mart)]
 ```
 
+**Figura 19.** Relación del proceso ETL con la arquitectura de un Data Warehouse.
+
 En esta práctica **la salida es un archivo Excel, no un Data Warehouse implementado**. Aun así, la arquitectura desarrollada reproduce las etapas fundamentales de preparación de datos requeridas para una carga analítica futura. El catálogo JSON cumple una función similar a una pequeña tabla de referencia o dimensión de clasificaciones.
 
 ## 7. Conclusiones
 
-1. La Parte 1 permite identificar que la limpieza de nombres y apellidos requiere reglas controladas; algunos caracteres anómalos son ambiguos y no deben sustituirse de forma automática sin evidencia.
-2. La variabilidad de fechas demuestra la importancia de diferenciar formato visual, datos textuales y fórmulas antes de estandarizar la información.
-3. En la Parte 2 se diseñó una integración de dos fuentes heterogéneas mediante `Stream Lookup`; las dos transformaciones seleccionadas corresponden a estandarización de texto y tratamiento de nulos.
-4. El análisis de las fuentes de Netflix identificó 8.800 clasificaciones compatibles con el catálogo y 7 registros pendientes de revisión. **Es necesario comprobar estos totales en la salida final de Pentaho** antes de presentarlos como resultados de ejecución.
-5. Ambos procesos ilustran la función del ETL como preparación y control de calidad previa a una posible arquitectura de Data Warehouse.
+1. Se implementaron procesos ETL en Pentaho Data Integration mediante Spoon para leer fuentes Excel, CSV y JSON, aplicar transformaciones y generar archivos Excel de salida.
+
+2. La revisión de los registros de estudiantes permitió identificar caracteres alterados en nombres y apellidos, formatos de fecha heterogéneos y celdas con fórmulas. Estos hallazgos evidenciaron que la calidad de los datos debe evaluarse antes de transformarlos, pues eliminar símbolos o uniformar su presentación no garantiza recuperar el contenido correcto.
+
+3. En la Parte 1 se aplicaron sustituciones de texto, normalización de estados y reglas para reorganizar las fechas, conservando el archivo fuente para comparar los resultados. Sin embargo, la corrección de nombres y la validación de fechas se alcanzaron parcialmente: los caracteres eliminados no recuperaron las letras originales y aún deben comprobarse las fechas ambiguas y los resultados de las fórmulas.
+
+4. Se extrajeron las dos fuentes de Netflix: un CSV de 8.807 registros y un catálogo JSON de 14 clasificaciones. Su procesamiento demostró que fuentes con estructuras diferentes pueden integrarse mediante una clave común, en este caso la correspondencia entre `rating_limpio` y `codigo_rating`.
+
+5. La combinación de `String Operations`, `If field value is null` y `Stream Lookup` permitió estandarizar textos, asignar valores de sustitución a los campos nulos e incorporar categorías de audiencia. La conservación de los campos originales junto con los campos procesados facilitó la comparación y la trazabilidad de las transformaciones de Netflix.
 
 ## 8. Referencias bibliográficas
 
-1. Escuela Politécnica Nacional, Facultad de Ingeniería de Sistemas. *Práctica 1. Implementación de un proceso ETL y Staging Area con Pentaho Data Integration*. Material de clase facilitado para Business Intelligence, pp. 1–12.
-2. Shivam Bansal. *Netflix Movies and TV Shows*. Kaggle. https://www.kaggle.com/datasets/shivamb/netflix-shows (consultado para la práctica; indicar fecha de descarga: **[POR COMPLETAR]**).
-3. Proyecto Pentaho. *Pentaho Data Integration (Kettle)*. https://pentaho.com/pentaho-data-integration/ (referencia general de la herramienta).
-4. Equipo de trabajo. `categorias_netflix.json`. Catálogo complementario elaborado a partir de los códigos de clasificación encontrados en `netflix_titles.csv`.
+[1] IBM, «¿Qué es ETL (extracción, transformación, carga)?», *IBM Think*. [En línea]. Disponible en: [https://www.ibm.com/es-es/think/topics/etl](https://www.ibm.com/es-es/think/topics/etl). [Consulta: 11 de octubre de 2026].
+
+[2] Pentaho, «Getting Started with PDI» [Introducción a PDI], *Documentación de Pentaho*. [En línea]. Disponible en: [https://docs.pentaho.com/pdia-try-pdia/getting-started-with-pdi](https://docs.pentaho.com/pdia-try-pdia/getting-started-with-pdi). [Consulta: 10 de octubre de 2026].
+
+[3] D. Martínez, «Práctica 1. Implementación de un proceso ETL y Staging Area con Pentaho Data Integration», material de clase de Business Intelligence, Facultad de Ingeniería de Sistemas, Escuela Politécnica Nacional, Quito, Ecuador, 2026, pp. 1–12.
+
+[4] Pentaho, «String Operations» [Operaciones con cadenas de texto], *Documentación de Pentaho*. [En línea]. Disponible en: [https://docs.pentaho.com/pdia-data-integration/pdi-transformation-steps-reference-overview/string-operations](https://docs.pentaho.com/pdia-data-integration/pdi-transformation-steps-reference-overview/string-operations). [Consulta: 11 de octubre de 2026].
+
+[5] S. Bansal, «Netflix Movies and TV Shows» [Películas y series de Netflix], *Kaggle*, conjunto de datos. [En línea]. Disponible en: [https://www.kaggle.com/datasets/shivamb/netflix-shows](https://www.kaggle.com/datasets/shivamb/netflix-shows). [Consulta: 11 de octubre de 2026].
+
+[6] Grupo G, «categorias_netflix.json», catálogo de clasificaciones de audiencia elaborado para la Práctica 1 de Business Intelligence, Escuela Politécnica Nacional, Quito, Ecuador, 2026. [En línea]. Disponible en: [categorias_netflix.json](input/parte%202/categorias_netflix.json).
+
+[7] Pentaho, «PDI transformation steps» [Pasos de transformación de PDI], *Documentación de Pentaho Data Integration, versión 10.2*. [En línea]. Disponible en: [https://docs.pentaho.com/pdia-data-integration/10.2-data-integration/pdi-transformation-steps-reference-overview](https://docs.pentaho.com/pdia-data-integration/10.2-data-integration/pdi-transformation-steps-reference-overview). [Consulta: 12 de octubre de 2026].
 
 ## 9. Declaración de uso de la IA
-En el desarrollo de esta práctica se utilizó una herramienta de inteligencia artificial generativa como apoyo en aproximadamente un **20% del trabajo**, principalmente para la selección de fuentes de datos, generación del catálogo JSON de categorías de Netflix, orientación en la configuración de componentes de Pentaho Data Integration y organización y redacción de la documentación en Markdown. El **80% restante** fue realizado directamente por los integrantes del grupo, incluyendo la implementación y ejecución de los procesos ETL, aplicación de transformaciones de limpieza y estandarización, integración de fuentes de datos, generación de archivos de salida, validación de resultados y recopilación de evidencias. Todo el contenido proporcionado por la IA fue revisado, adaptado y validado por los integrantes del equipo.
+En el desarrollo de esta práctica se utilizó una herramienta de inteligencia artificial generativa como apoyo en aproximadamente un **20% del trabajo**, principalmente para la selección de fuentes de datos, generación del catálogo JSON de categorías de Netflix y orientación en la configuración de componentes de Pentaho Data Integration. El **80% restante** fue realizado directamente por los integrantes del grupo, incluyendo la implementación y ejecución de los procesos ETL, aplicación de transformaciones de limpieza y estandarización, integración de fuentes de datos, generación de archivos de salida, validación de resultados y recopilación de evidencias. Todo el contenido proporcionado por la IA fue revisado, adaptado y validado por los integrantes del equipo.
