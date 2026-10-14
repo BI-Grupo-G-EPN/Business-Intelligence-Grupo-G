@@ -340,17 +340,13 @@ Los conteos finales deben confirmarse con los resultados de ejecución de Pentah
 
 | Actividad | Evidencia | Estado |
 |---|---|---|
-| 1 | Archivo original con fechas heterogéneas | Disponible (Figura 1) |
-| 1 | Captura de fórmula en fecha | Disponible (Figura 2) |
-| 1 | Configuración real de limpieza de nombres | **[POR COMPLETAR]** |
-| 1 | Configuración real de validación de fechas | **[POR COMPLETAR]** |
-| 1 | Archivo de salida y comparación | **[POR COMPLETAR]** |
-| 2 | Configuración de JSON Input | Disponible (Figura 3) |
+| 1 | Archivo original con fechas heterogéneas | Disponible (Figura 2) |
+| 1 | Captura de fórmula en fecha | Disponible (Figura 3) |
+| 2 | Configuración de JSON Input | Disponible (Figura 6) |
 | 2 | Information hop desde JSON | Disponible (Figura 4) |
-| 2 | Configuración de Stream Lookup | Disponible (Figura 5) |
-| 2 | Capturas de las dos limpiezas | **[POR COMPLETAR]** |
-| 2 | Vista previa de integración y XLS final | **[POR COMPLETAR]** |
-| 2 | Conteo final y ejecución sin errores | **[POR COMPLETAR]** |
+| 2 | Configuración de Stream Lookup | Disponible (Figura 9) |
+| 2 | Capturas de las dos limpiezas | Disponible (Figuras 7 y 8) |
+| 2 | Vista previa de integración y XLS final | Disponible (Figuras 10 y 11) |
 
 ### 5.2. Criterios de calidad
 
