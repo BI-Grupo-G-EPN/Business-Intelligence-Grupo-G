@@ -30,34 +30,36 @@ Práctica 2: Implementación de un proceso ETL con base de datos y Pentaho Data 
 
 ## Índice
 
-1. [Introducción](#1-introducción)
-2. [Objetivos](#2-objetivos)
-   - 2.1. [Objetivo general](#21-objetivo-general)
-   - 2.2. [Objetivos específicos](#22-objetivos-específicos)
-3. [Herramientas y fuentes](#3-herramientas-y-fuentes)
-4. [Desarrollo](#4-desarrollo)
-   - 4.1. [Preparación de la base de datos (extracción inicial)](#41-preparación-de-la-base-de-datos-extracción-inicial)
-   - 4.2. [Creación del entorno en Pentaho y conexión](#42-creación-del-entorno-en-pentaho-y-conexión)
-   - 4.3. [Extracción (Table input)](#43-extracción-table-input)
-   - 4.4. [Transformación y limpieza (Replace in string)](#44-transformación-y-limpieza-replace-in-string)
-   - 4.5. [Carga (Table output)](#45-carga-table-output)
-   - 4.6. [Ejecución del flujo ETL](#46-ejecución-del-flujo-etl)
-5. [Validación y evidencias](#5-validación-y-evidencias)
-   - 5.1. [Tabla de evidencias por actividad](#51-tabla-de-evidencias-por-actividad)
-   - 5.2. [Criterios de calidad](#52-criterios-de-calidad)
-6. [Conclusiones](#6-conclusiones)
-7. [Referencias bibliográficas](#7-referencias-bibliográficas)
-8. [Declaración de uso de la IA](#8-declaración-de-uso-de-la-ia)
+- [1. Introducción](#1-introducción)
+- [2. Objetivos](#2-objetivos)
+  - [2.1. Objetivo general](#21-objetivo-general)
+  - [2.2. Objetivos específicos](#22-objetivos-específicos)
+- [3. Herramientas y fuentes](#3-herramientas-y-fuentes)
+- [4. Desarrollo](#4-desarrollo)
+  - [4.1. Preparación de la base de datos (extracción inicial)](#41-preparación-de-la-base-de-datos-extracción-inicial)
+  - [4.2. Creación del entorno en Pentaho y conexión](#42-creación-del-entorno-en-pentaho-y-conexión)
+  - [4.3. Extracción (Table input)](#43-extracción-table-input)
+  - [4.4. Transformación y limpieza (Replace in string)](#44-transformación-y-limpieza-replace-in-string)
+  - [4.5. Carga (Table output)](#45-carga-table-output)
+  - [4.6. Ejecución del flujo ETL](#46-ejecución-del-flujo-etl)
+- [5. Validación y evidencias](#5-validación-y-evidencias)
+  - [5.1. Tabla de evidencias por actividad](#51-tabla-de-evidencias-por-actividad)
+  - [5.2. Criterios de calidad](#52-criterios-de-calidad)
+- [6. Conclusiones](#6-conclusiones)
+- [7. Referencias bibliográficas](#7-referencias-bibliográficas)
+- [8. Declaración de uso de la IA](#8-declaración-de-uso-de-la-ia)
 
 <hr>
 
 # 1. Introducción
-La integración de datos es un pilar fundamental en los entornos corporativos para la toma de decisiones informadas. En empresas con múltiples sucursales, la descentralización del registro de información suele provocar inconsistencias semánticas y de formato, dificultando la consolidación del inventario. El presente informe detalla la implementación de un proceso ETL (Extracción, Transformación y Carga) para el caso de estudio de la empresa "Ferretería El Tornillo Feliz", con el propósito de mitigar estas inconsistencias. Mediante la limpieza y normalización de las categorías, unidades de medida y formatos de precios de los productos, se busca consolidar un catálogo único y estandarizado en un Data Warehouse corporativo que sirva como base confiable para futuros análisis.
+La integración de datos es un pilar fundamental en los entornos corporativos para la toma de decisiones informadas. En empresas con múltiples sucursales, la descentralización del registro de información suele provocar inconsistencias semánticas y de formato, dificultando la consolidación del inventario. 
+
+El presente informe detalla la implementación de un proceso ETL (Extracción, Transformación y Carga) para el caso de estudio de la empresa "Ferretería El Tornillo Feliz", con el propósito de mitigar estas inconsistencias. Mediante la limpieza y normalización de las categorías, unidades de medida y formatos de precios de los productos, se busca obtener un catálogo único y estandarizado en un Data Warehouse que sirva como base para futuros análisis.
 
 # 2. Objetivos
 
 ## 2.1. Objetivo general
-Implementar un flujo ETL utilizando herramientas de integración de datos para limpiar, estandarizar y centralizar el catálogo de productos de múltiples sucursales en una base de datos corporativa.
+Implementar un flujo ETL utilizando herramientas de integración de datos para limpiar, estandarizar y centralizar el catálogo de productos de múltiples sucursales en una base de datos.
 
 ## 2.2. Objetivos específicos
 - Extraer los registros brutos de inventario desde una base de datos PostgreSQL mediante un proceso de conexión nativa.
@@ -67,18 +69,18 @@ Implementar un flujo ETL utilizando herramientas de integración de datos para l
 # 3. Herramientas y fuentes
 Para el desarrollo y validación de la presente práctica, se configuró un entorno de pruebas local (localhost) apoyado en las siguientes tecnologías y recursos:
 
-- **Gestor de Base de Datos Relacional (RDBMS):** PostgreSQL (versión 18) (PostgreSQL Global Development Group, s. f.), utilizado como el motor principal para el almacenamiento estructurado del Data Warehouse. Para su administración se empleó pgAdmin 4, que permitió la ejecución de scripts DDL (Data Definition Language) para la creación de esquemas (`staging`) y tablas, así como sentencias DML (Data Manipulation Language) para la inserción masiva y consulta de los datos.
-- **Herramienta de Integración de Datos (ETL):** Pentaho Data Integration (PDI), operado a través de su cliente gráfico Spoon (Community Edition) (Hitachi Vantara, s. f.). PDI es una plataforma basada en Java que permite el modelado visual de flujos de datos. En este proyecto se configuró una conexión nativa mediante el controlador JDBC para comunicarse directamente con PostgreSQL, facilitando las tareas de extracción, transformación en memoria (limpieza de cadenas) y carga por lotes (batch).
-- **Fuentes de datos (dataset inicial):** La información base consistió en un script SQL documentado en el "Caso de Estudio: Ferretería El Tornillo Feliz" de la guía de laboratorio (Escuela Politécnica Nacional, 2026), con 100 registros simulados de un inventario en estado crudo (raw data). Los datos presentan intencionalmente problemas de calidad: falta de estandarización semántica, símbolo monetario (`$`) en campos que deben ser numéricos y abreviaturas inconsistentes introducidas manualmente por distintas sucursales.
+- **Gestor de Base de Datos Relacional (RDBMS):** PostgreSQL (versión 18) [1], utilizado como el motor principal para el almacenamiento estructurado del Data Warehouse. Para su administración se empleó pgAdmin 4, que permitió la ejecución de scripts DDL (Data Definition Language) para la creación de esquemas (`staging`) y tablas, así como sentencias DML (Data Manipulation Language) para la inserción masiva y consulta de los datos.
+- **Herramienta de Integración de Datos (ETL):** Pentaho Data Integration (PDI), operado a través de su cliente gráfico Spoon (Community Edition) [2]. PDI es una plataforma basada en Java que permite el modelado visual de flujos de datos. En este proyecto se configuró una conexión nativa mediante el controlador JDBC para comunicarse directamente con PostgreSQL, facilitando las tareas de extracción, transformación en memoria (limpieza de cadenas) y carga por lotes (batch).
+- **Fuentes de datos (dataset inicial):** La información base consistió en un script SQL documentado en el "Caso de Estudio: Ferretería El Tornillo Feliz" de la guía de laboratorio [3], con 100 registros simulados de un inventario en estado crudo (raw data). Los datos presentan intencionalmente problemas de calidad: falta de estandarización semántica, símbolo monetario (`$`) en campos que deben ser numéricos y abreviaturas inconsistentes introducidas manualmente por distintas sucursales.
 - **Entorno de ejecución y conectividad:** Equipo de escritorio con el motor de base de datos ejecutándose localmente en el puerto por defecto (5432).
 
 # 4. Desarrollo
 El desarrollo de la práctica se dividió en la preparación del entorno de base de datos y la posterior construcción del flujo ETL en Pentaho. Cada paso se respalda con las capturas numeradas como figuras.
 
 ## 4.1. Preparación de la base de datos (extracción inicial)
-Se creó la base de datos `FerreteriaDW` en PostgreSQL desde pgAdmin 4. Para ello se abrió el menú contextual *Databases > Create > Database…* (Figura 1) y se completó el formulario con el nombre `FerreteriaDW` y el propietario `postgres` (Figura 2). Luego se abrió el *Query Tool* de la nueva base (Figura 3).
+Se creó la base de datos `FerreteriaDW` en PostgreSQL desde pgAdmin 4. Para ello se abrió el menú contextual *Databases > Create > Database* (Figura 1) y se completó el formulario con el nombre `FerreteriaDW` y el propietario `postgres` (Figura 2). Luego se abrió el *Query Tool* de la nueva base (Figura 3).
 
-Desde el *Query Tool* se cargó el script que crea el esquema `staging` y la tabla `productos_ferreteria_raw`, cuyas columnas son todas de tipo `VARCHAR`, y que inserta los registros con las inconsistencias (Figura 4). El script se ejecutó con la opción *Execute script* (F5) (Figura 5) y el motor confirmó la inserción de las 100 filas con el mensaje `INSERT 0 100` (Figura 6).
+Desde el *Query Tool* se cargó el script que crea el esquema `staging` y la tabla `productos_ferreteria_raw`, cuyas columnas son todas de tipo `VARCHAR` y que inserta los registros con las inconsistencias (Figura 4). El script se ejecutó con la opción *Execute script* (F5) (Figura 5) y el motor confirmó la inserción de las 100 filas con el mensaje `INSERT 0 100` (Figura 6).
 
 <img src="figuras/captura_01.png" alt="Menú Create > Database en pgAdmin 4">
 
@@ -105,7 +107,7 @@ Desde el *Query Tool* se cargó el script que crea el esquema `staging` y la tab
 **Figura 6.** Confirmación de la inserción de 100 registros (INSERT 0 100).
 
 ## 4.2. Creación del entorno en Pentaho y conexión
-En Spoon se creó una nueva transformación mediante *File > New > Transformation* (Figura 7). Después se abrió la opción *File > New > Database Connection…* (Figura 8) y se configuró la conexión "PostgreSQL Conexion" con tipo PostgreSQL, acceso Native (JDBC), host `localhost`, base `FerreteriaDW`, puerto 5432 y usuario `postgres` (Figura 9). Finalmente se presionó el botón *Test* (Figura 10) y la prueba de conexión resultó exitosa (Figura 11).
+En Spoon se creó una nueva transformación mediante *File > New > Transformation* (Figura 7). Después se abrió la opción *File > New > Database Connection* (Figura 8) y se configuró la conexión "PostgreSQL Conexion" con tipo PostgreSQL, acceso Native (JDBC), host `localhost`, base `FerreteriaDW`, puerto 5432 y usuario `postgres` (Figura 9). Finalmente se presionó el botón *Test* (Figura 10) y la prueba de conexión resultó exitosa (Figura 11).
 
 <img src="figuras/captura_07.png" alt="File > New > Transformation en Spoon">
 
@@ -153,10 +155,10 @@ Se agregó al lienzo el paso *Table input* arrastrándolo desde el panel *Design
 ## 4.4. Transformación y limpieza (Replace in string)
 Se añadió el paso *Replace in string* (Figura 17) y se conectó con *Table input* (Figura 18). Con el botón *Get fields* se cargaron las seis columnas del flujo (Figura 19). Se definieron reglas de reemplazo literal, sin distinción entre mayúsculas y minúsculas (Case sensitive: N), para:
 
-- eliminar el carácter `$` de `precio_unitario` y homologar `Htas` en `categoria` (Figura 20);
-- homologar variantes de `categoria` hacia "Herramientas" mediante las reglas `Htas`, `herram` y `Herramienta` (Figura 21);
-- homologar `unidad_medida`, empezando por `1 und` → "1 Unidad" (Figura 22);
-- completar las reglas de unidades: `1u` y `1 unidad` a "1 Unidad", `1 Lt` y `1L` a "1 Litro", `CJ` y `caja` a "Caja", y `1 rl` a "1 Rollo" (Figura 23).
+- Eliminar el carácter `$` de `precio_unitario` y homologar `Htas` en `categoria` (Figura 20);
+- Homologar variantes de `categoria` hacia "Herramientas" mediante las reglas `Htas`, `herram` y `Herramienta` (Figura 21);
+- Homologar `unidad_medida`, empezando por `1 und` → "1 Unidad" (Figura 22);
+- Completar las reglas de unidades: `1u` y `1 unidad` a "1 Unidad", `1 Lt` y `1L` a "1 Litro", `CJ` y `caja` a "Caja", y `1 rl` a "1 Rollo" (Figura 23).
 
 <img src="figuras/captura_17.png" alt="Selección de Replace in string">
 
@@ -283,9 +285,11 @@ La causa de los valores erróneos en `categoria` es que los reemplazos literales
 - La validación en la tabla destino fue clave para detectar las inconsistencias residuales, lo que demuestra la importancia de verificar la calidad del dato después de cada carga antes de ponerlo a disposición de herramientas de Business Intelligence.
 
 # 7. Referencias bibliográficas
-- Escuela Politécnica Nacional. (2026). *Práctica 2: ETL Initial Load* [Guía de laboratorio]. Business Intelligence, Facultad de Ingeniería de Sistemas.
-- Hitachi Vantara. (s. f.). *Pentaho Data Integration documentation*. https://docs.hitachivantara.com/
-- PostgreSQL Global Development Group. (s. f.). *PostgreSQL 18 documentation*. https://www.postgresql.org/docs/18/
+[1] PostgreSQL Global Development Group, «PostgreSQL 18 documentation». [En línea]. Disponible en: [https://www.postgresql.org/docs/18/](https://www.postgresql.org/docs/18/).
+
+[2] Hitachi Vantara, «Pentaho Data Integration documentation». [En línea]. Disponible en: [https://docs.hitachivantara.com/](https://docs.hitachivantara.com/).
+
+[3] Martínez, D, «Práctica 2: ETL Initial Load», guía de laboratorio de Business Intelligence, Escuela Politécnica Nacional, Facultad de Ingeniería de Sistemas, 2026.
 
 # 8. Declaración de uso de la IA
-Para la elaboración de este informe, se declara un uso de Inteligencia Artificial (LLM) del 20%, utilizado exclusivamente como asistente de redacción, estructuración y corrección orto-tipográfica del documento bajo los parámetros de la rúbrica exigida. El 80% restante corresponde a trabajo intelectual, humano y práctico en el diseño, desarrollo y captura de evidencias del flujo ETL en Pentaho Data Integration y la limpieza lógica de los datos en PostgreSQL.
+Para la elaboración de este informe, se declara un uso de Inteligencia Artificial (LLM) del 20%, utilizado exclusivamente como asistente de redacción y estructuración del documento. El 80% restante corresponde a trabajo en el diseño, desarrollo y captura de evidencias del flujo ETL en Pentaho Data Integration y la limpieza de los datos en PostgreSQL.
