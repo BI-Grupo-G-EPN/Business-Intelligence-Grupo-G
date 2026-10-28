@@ -39,8 +39,8 @@ Práctica 4: Modelo físico dimensional en PostgreSQL
   - [4.1. Parte guiada: análisis dimensional de products.csv](#41-parte-guiada-análisis-dimensional-de-productscsv)
   - [4.2. Staging e importación de productos](#42-staging-e-importación-de-productos)
   - [4.3. Validación y limpieza de productos](#43-validación-y-limpieza-de-productos)
-  - [4.4. Creación y carga de dim_product](#44-creación-y-carga-de-dim_product)
-  - [4.5. Consultas de análisis sobre dim_product](#45-consultas-de-análisis-sobre-dim_product)
+  - [4.4. Creación y carga de dim\_product](#44-creación-y-carga-de-dim_product)
+  - [4.5. Consultas de análisis sobre dim\_product](#45-consultas-de-análisis-sobre-dim_product)
   - [4.6. Parte grupal: análisis dimensional del dataset de ventas](#46-parte-grupal-análisis-dimensional-del-dataset-de-ventas)
   - [4.7. Staging, importación y validación de ventas](#47-staging-importación-y-validación-de-ventas)
   - [4.8. DDL del modelo estrella](#48-ddl-del-modelo-estrella)
@@ -520,6 +520,10 @@ GROUP BY p.category, d.year_month
 ORDER BY d.year_month, p.category;
 ```
 
+<img src="figuras/captura_27.png" alt="Resultado de la consulta 1">
+
+**Figura 27.** Resultado de la consulta 1: ventas por categoría y mes.
+
 **Consulta 2. ¿Cuál es el ingreso total por cliente y género?** (Figura 28)
 
 ```sql
@@ -531,6 +535,10 @@ JOIN dim_customer c ON f.customer_key = c.customer_key
 GROUP BY c.customer_key, c.gender
 ORDER BY ingreso_total DESC;
 ```
+
+<img src="figuras/captura_28.png" alt="Resultado de la consulta 2">
+
+**Figura 28.** Resultado de la consulta 2: ingreso total por cliente y género.
 
 **Consulta 3. ¿Cuál es la cantidad total vendida por producto?** (Figura 29)
 
@@ -544,6 +552,10 @@ GROUP BY p.product_key, p.product_name
 ORDER BY cantidad_total DESC;
 ```
 
+<img src="figuras/captura_29.png" alt="Resultado de la consulta 3">
+
+**Figura 29.** Resultado de la consulta 3: cantidad total por producto.
+
 **Consulta 4. ¿Cuál fue la cantidad enviada por mes de envío?** (Figura 30)
 
 ```sql
@@ -554,6 +566,10 @@ JOIN dim_date d ON f.ship_date_key = d.date_key
 GROUP BY d.year_month
 ORDER BY d.year_month;
 ```
+
+<img src="figuras/captura_30.png" alt="Resultado de la consulta 4">
+
+**Figura 30.** Resultado de la consulta 4: cantidad enviada por mes de envío.
 
 **Consulta 5. ¿Cuánto se vendió por tamaño de producto y estado civil del cliente?** (Figura 31)
 
@@ -569,27 +585,11 @@ GROUP BY p.size, c.marital_status
 ORDER BY p.size, c.marital_status;
 ```
 
-Las consultas 1 y 4 comparten estructura, pero la primera une con `order_date_key` y la cuarta con `ship_date_key`: una misma tabla `dim_date` responde tanto a "cuándo se pidió" como a "cuándo se envió". La consulta 5 es la única que cruza dos dimensiones a la vez (producto y cliente).
-
-<img src="figuras/captura_27.png" alt="Resultado de la consulta 1">
-
-**Figura 27.** Resultado de la consulta 1: ventas por categoría y mes.
-
-<img src="figuras/captura_28.png" alt="Resultado de la consulta 2">
-
-**Figura 28.** Resultado de la consulta 2: ingreso total por cliente y género.
-
-<img src="figuras/captura_29.png" alt="Resultado de la consulta 3">
-
-**Figura 29.** Resultado de la consulta 3: cantidad total por producto.
-
-<img src="figuras/captura_30.png" alt="Resultado de la consulta 4">
-
-**Figura 30.** Resultado de la consulta 4: cantidad enviada por mes de envío.
-
 <img src="figuras/captura_31.png" alt="Resultado de la consulta 5">
 
 **Figura 31.** Resultado de la consulta 5: ventas por tamaño y estado civil.
+
+Las consultas 1 y 4 comparten estructura, pero la primera une con `order_date_key` y la cuarta con `ship_date_key`: una misma tabla `dim_date` responde tanto a "cuándo se pidió" como a "cuándo se envió". La consulta 5 es la única que cruza dos dimensiones a la vez (producto y cliente).
 
 ## 4.12. Diagrama en Power Pivot
 Las cuatro tablas del modelo se exportaron a CSV desde pgAdmin (UTF-8, encabezado activado, delimitador coma) y se cargaron al Modelo de datos de Excel mediante *Datos > Obtener datos > Desde texto/CSV*, con la opción *Solo crear conexión*. Se recurrió a esta vía porque el conector nativo de PostgreSQL requería el componente Npgsql, no disponible en el equipo.
@@ -686,8 +686,6 @@ La coincidencia entre los totales de las consultas 3 y 4 (296 unidades) constitu
 [2] Microsoft, «Power Pivot: análisis de datos eficaz y modelado de datos en Excel», Soporte de Microsoft. [En línea]. Disponible en: [https://support.microsoft.com/](https://support.microsoft.com/).
 
 [3] Martínez, D, «Práctica 4: Modelo físico dimensional en PostgreSQL», guía de laboratorio de Business Intelligence, Escuela Politécnica Nacional, Facultad de Ingeniería de Sistemas, 2026.
-
-[4] R. Kimball y M. Ross, *The Data Warehouse Toolkit: The Definitive Guide to Dimensional Modeling*, 3.ª ed. Hoboken, NJ: Wiley, 2013.
 
 # 8. Declaración de uso de la IA
 Para la elaboración de este informe, se declara un uso de Inteligencia Artificial (LLM) del 20%, utilizado como asistente de guía paso a paso, redacción y estructuración del documento. El porcentaje restante corresponde a la ejecución de los scripts en PostgreSQL, la construcción del modelo en Power Pivot, la validación de resultados y la captura de evidencias.
