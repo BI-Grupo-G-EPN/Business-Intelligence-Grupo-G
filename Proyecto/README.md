@@ -57,6 +57,7 @@ Proyecto Primer Bimestre - La Tradicional
   - [7.6 Validación de la carga](#76-validación-de-la-carga)
 - [8. Resultados: consultas SQL](#8-resultados-consultas-sql)
 - [9. Dashboard en Power BI](#9-dashboard-en-power-bi)
+  - [Enlace de visualización del dashboard](#enlace-de-visualización-del-dashboard)
 - [10. Análisis OLAP](#10-análisis-olap)
 - [11. Insights y recomendaciones](#11-insights-y-recomendaciones)
 - [12. Conclusiones](#12-conclusiones)
@@ -440,6 +441,16 @@ El ranking cambia al ordenar por unidades: **Orejas** pasa del quinto al **terce
 
 <a id="dashboard"></a>
 ## 9. Dashboard en Power BI
+
+### Enlace de visualización del dashboard
+
+El dashboard está publicado en Power BI y puede consultarse en línea, sin instalar Power BI Desktop, en el siguiente enlace:
+
+<p align="center">
+  <a href="https://app.powerbi.com/view?r=eyJrIjoiMjAzOWUxMWItYzA0MS00ZmQ0LWI2NWItM2I5MzFiMjY2M2IzIiwidCI6IjY4MmE0ZTZhLWE3N2YtNDk1OC1hM2FjLTllMjY2ZDE4YWEzNyIsImMiOjR9"><b>📊 Ver el dashboard de La Tradicional en Power BI</b></a>
+</p>
+
+El informe en línea es interactivo: permite navegar entre las cuatro páginas (*Ventas y productos*, *Clientes y cobros*, *Compras y proveedores* y *Análisis OLAP*), usar las segmentaciones de datos y aplicar las operaciones OLAP descritas en la sección 10.
 
 El dashboard se construyó siguiendo la guía de laboratorio de Power BI [7] y se conectó directamente a PostgreSQL en modo *Importar* y carga solo las seis tablas del modelo dimensional. Las cinco relaciones se importaron desde las claves foráneas de la base. Para garantizar que el dashboard calcule igual que las consultas SQL, se crearon medidas DAX equivalentes (Tabla 9).
 
