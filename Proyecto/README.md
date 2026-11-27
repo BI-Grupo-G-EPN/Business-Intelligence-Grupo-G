@@ -180,7 +180,7 @@ En ventas se eligió la línea de producto, y no la factura completa, porque las
 <a id="postgresql"></a>
 ### 6.3 Implementación en PostgreSQL
 
-El modelo se implementó en la base de datos `dw_la_tradicional` mediante el script [`SQL/01_creacion_tablas.sql`](SQL/01_creacion_tablas.sql), siguiendo el procedimiento de la guía de creación de un data warehouse [6]. El script crea:
+El modelo se implementó en la base de datos `dw_la_tradicional` mediante el script [`queries sql/01_creacion_tablas.sql`](queries%20sql/01_creacion_tablas.sql), siguiendo el procedimiento de la guía de creación de un data warehouse [6]. El script crea:
 
 - **2 tablas de staging** (`raw_compras`, `raw_ventas`), que reciben los datos crudos.
 - **4 dimensiones**, con **claves primarias** (`SERIAL` en las llaves sustitutas y `DATE` en `dim_tiempo`).
@@ -284,7 +284,7 @@ El job `00_job_etl_la_tradicional.kjb` ejecuta todo el proceso con un solo clic 
 <a id="validacion"></a>
 ### 7.6 Validación de la carga
 
-El script [`SQL/02_verificacion_contenido.sql`](SQL/02_verificacion_contenido.sql) reúne 26 controles en una sola consulta. Cada control compara el valor obtenido con el esperado y devuelve *OK* o *REVISAR*. La Tabla 7 resume los más importantes.
+El script [`queries sql/02_verificacion_contenido.sql`](queries%20sql/02_verificacion_contenido.sql) reúne 26 controles en una sola consulta. Cada control compara el valor obtenido con el esperado y devuelve *OK* o *REVISAR*. La Tabla 7 resume los más importantes.
 
 **Tabla 7.** *Principales controles de validación*
 
@@ -307,7 +307,7 @@ El script [`SQL/02_verificacion_contenido.sql`](SQL/02_verificacion_contenido.sq
 <a id="consultas"></a>
 ## 8. Resultados: consultas SQL
 
-Las seis preguntas de negocio se responden con las consultas del script [`SQL/03_preguntas_negocio.sql`](SQL/03_preguntas_negocio.sql), que trabajan únicamente sobre las tablas `fact_` y `dim_`.
+Las seis preguntas de negocio se responden con las consultas del script [`queries sql/03_preguntas_negocio.sql`](queries%20sql/03_preguntas_negocio.sql), que trabajan únicamente sobre las tablas `fact_` y `dim_`.
 
 <details>
 <summary><b>Ver las consultas SQL de las preguntas P1 a P6</b></summary>
