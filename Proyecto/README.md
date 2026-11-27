@@ -202,14 +202,14 @@ El ETL se construyó en Pentaho Data Integration (Spoon) 10.2 con **8 transforma
 
 | # | Archivo | Destino | Pasos principales |
 |---|---|---|---|
-| 01 | `01_carga_raw_compras.ktr` | `raw_compras` | Text file input → Table output |
-| 02 | `02_carga_raw_ventas.ktr` | `raw_ventas` | Microsoft Excel input → Replace in string → Select values → Table output |
-| 03 | `03_dim_tiempo.ktr` | `dim_tiempo` | Table input → Calculator → Select values → Table output |
-| 04 | `04_dim_producto.ktr` | `dim_producto` | Table input → String operations → Sort rows → Unique rows → Stream lookup (catálogo CSV) → Table output |
-| 05 | `05_dim_cliente.ktr` | `dim_cliente` | Table input → String operations → Sort rows → Unique rows → Formula → Table output |
-| 06 | `06_dim_proveedor.ktr` | `dim_proveedor` | Table input → String operations → Sort rows → Unique rows → Table output |
-| 07 | `07_fact_ventas.ktr` | `fact_ventas` | Table input → 3 Stream lookup (producto, cliente, fecha) → Select values → Table output |
-| 08 | `08_fact_compras.ktr` | `fact_compras` | Table input → Sort rows → Unique rows → 2 Stream lookup (proveedor, fecha) → Select values → Table output |
+| 01 | [`01_carga_raw_compras.ktr`](etl/01_carga_raw_compras.ktr) | `raw_compras` | Text file input → Table output |
+| 02 | [`02_carga_raw_ventas.ktr`](etl/02_carga_raw_ventas.ktr) | `raw_ventas` | Microsoft Excel input → Replace in string → Select values → Table output |
+| 03 | [`03_dim_tiempo.ktr`](etl/03_dim_tiempo.ktr) | `dim_tiempo` | Table input → Calculator → Select values → Table output |
+| 04 | [`04_dim_producto.ktr`](etl/04_dim_producto.ktr) | `dim_producto` | Table input → String operations → Sort rows → Unique rows → Stream lookup (catálogo CSV) → Table output |
+| 05 | [`05_dim_cliente.ktr`](etl/05_dim_cliente.ktr) | `dim_cliente` | Table input → String operations → Sort rows → Unique rows → Formula → Table output |
+| 06 | [`06_dim_proveedor.ktr`](etl/06_dim_proveedor.ktr) | `dim_proveedor` | Table input → String operations → Sort rows → Unique rows → Table output |
+| 07 | [`07_fact_ventas.ktr`](etl/07_fact_ventas.ktr) | `fact_ventas` | Table input → 3 Stream lookup (producto, cliente, fecha) → Select values → Table output |
+| 08 | [`08_fact_compras.ktr`](etl/08_fact_compras.ktr) | `fact_compras` | Table input → Sort rows → Unique rows → 2 Stream lookup (proveedor, fecha) → Select values → Table output |
 
 <a id="staging"></a>
 ### 7.1 Carga a staging
@@ -274,7 +274,7 @@ Todas las dimensiones siguen el mismo patrón: lectura desde staging, limpieza d
 <a id="job"></a>
 ### 7.5 Job de orquestación
 
-El job `00_job_etl_la_tradicional.kjb` ejecuta todo el proceso con un solo clic (Figura 8). Su primer paso, *Limpiar tablas*, vacía las ocho tablas con `TRUNCATE ... RESTART IDENTITY`, lo que permite repetir la carga sin duplicar datos. Luego ejecuta las transformaciones en orden: staging, dimensiones y hechos. Los saltos condicionales garantizan que cada transformación se ejecute solo si la anterior terminó correctamente.
+El job [`00_job_etl_la_tradicional.kjb`](etl/00_job_etl_la_tradicional.kjb) ejecuta todo el proceso con un solo clic (Figura 8). Su primer paso, *Limpiar tablas*, vacía las ocho tablas con `TRUNCATE ... RESTART IDENTITY`, lo que permite repetir la carga sin duplicar datos. Luego ejecuta las transformaciones en orden: staging, dimensiones y hechos. Los saltos condicionales garantizan que cada transformación se ejecute solo si la anterior terminó correctamente.
 
 ![Figura 8](figuras/figura08_job_etl.png)
 <!-- Captura sugerida: lienzo del job en Spoon con todas las entradas en verde y la pestaña Job metrics. -->
@@ -563,22 +563,42 @@ En Power BI, el cubo se representa con una matriz (filas: jerarquía de tiempo; 
 ## 13. Estructura del repositorio
 
 ```
-├── README.md                              ← este informe
-├── SQL/
-│   ├── 01_creacion_tablas.sql             ← staging, dimensiones, hechos, PK y FK
-│   ├── 02_verificacion_contenido.sql      ← 26 controles de validación
-│   └── 03_preguntas_negocio.sql           ← consultas de las 6 preguntas
-├── Pentaho/
-│   ├── 00_job_etl_la_tradicional.kjb
-│   └── 01_carga_raw_compras.ktr … 08_fact_compras.ktr
-├── Entradas/
-│   └── catalogo/clasificacion_productos.csv ← catálogo de líneas de producto
-├── PowerBI/
-│   ├── Dashboard_La_Tradicional.pbix
-│   ├── tema/tema_la_tradicional_plantilla.json
-│   └── fondos/fondo_1 … fondo_4 (.png)
-└── Capturas/                              ← figuras de este informe
+Proyecto/
+├── README.md                                  ← este informe
+├── queries sql/
+│   ├── 01_creacion_tablas.sql                 ← staging, dimensiones, hechos, PK y FK
+│   ├── 02_verificacion_contenido.sql          ← 26 controles de validación
+│   └── 03_preguntas_negocio.sql               ← consultas de las 6 preguntas
+├── etl/
+│   ├── 00_job_etl_la_tradicional.kjb          ← job que orquesta todo el ETL
+│   ├── 01_carga_raw_compras.ktr               ← staging de compras (SRI)
+│   ├── 02_carga_raw_ventas.ktr                ← staging de ventas (Excel)
+│   ├── 03_dim_tiempo.ktr
+│   ├── 04_dim_producto.ktr
+│   ├── 05_dim_cliente.ktr
+│   ├── 06_dim_proveedor.ktr
+│   ├── 07_fact_ventas.ktr
+│   └── 08_fact_compras.ktr
+├── power bi/
+│   ├── Dashboard_La_Tradicional.pbix          ← dashboard de 4 páginas
+│   ├── tema/
+│   │   ├── tema_la_tradicional.json           ← tema con los colores de la marca
+│   │   └── tema_la_tradicional_plantilla.json ← variante del tema usada como plantilla
+│   └── fondos/
+│       ├── fondo_1_ventas_productos.png       ← fondos de cada página del dashboard
+│       ├── fondo_2_clientes_cobros.png
+│       ├── fondo_3_compras_proveedores.png
+│       ├── fondo_4_analisis_olap.png
+│       └── cubo_olap.png                      ← imagen del cubo de la página OLAP
+└── figuras/                                   ← figuras y logotipo de este informe
 ```
+
+Acceso directo a cada carpeta:
+
+- [`queries sql/`](queries%20sql/): scripts de creación del modelo, validación de la carga y consultas de negocio.
+- [`etl/`](etl/): job y transformaciones de Pentaho Data Integration.
+- [`power bi/`](power%20bi/): archivo del dashboard, tema de colores y fondos de las páginas.
+- [`figuras/`](figuras/): capturas y diagramas usados en este informe.
 
 Los datos originales no se incluyen por contener información personal de los clientes.
 
