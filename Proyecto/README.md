@@ -604,14 +604,7 @@ Los datos originales no se incluyen por contener información personal de los cl
 <a id="ia"></a>
 ## 15. Declaración de uso de inteligencia artificial
 
-En el desarrollo de este proyecto se utilizó **Claude (Anthropic)** como herramienta de apoyo para:
-
-- Guiar paso a paso la configuración de las transformaciones de Pentaho y la resolución de errores.
-- Proponer los scripts SQL de creación de tablas, validación y consultas de negocio.
-- Generar archivos de apoyo: transformaciones de hechos, job, tema y fondos del dashboard.
-- Elaborar un borrador de la presentación y de este informe.
-
-El equipo ejecutó, verificó y corrigió cada paso con los datos reales del negocio, validó los resultados contra las fuentes originales y es responsable del contenido final.
+En el desarrollo de este proyecto se utilizó **Claude (Anthropic)** como herramienta de apoyo.
 
 **Porcentaje estimado de uso de IA:** 
 
